@@ -3,19 +3,19 @@
 
 ## Overview
 
-Plan to create a website and iOS and Android app for Leeds Digital Festival.
-I'll be doing a talk about its creation at the festival the key points I would like to talk about are:
+Plan to create a website, iOS and Android app for Leeds Digital Festival.
+I'll be doing a talk about it's creation at the festival, the key points I would like to talk about are:
  - Building on Azure serverless
  - Pricing benefits of serverless
- - One code base for the apps
+ - One code base for 2 apps and one website
  - Performance
 
 We'll be loading the talks from the Wordpress database that backs the Leeds Digital Festival website.
-It'll be built on Azure, using Blob Storage, Functions.
+It'll be built on Azure, using Blob Storage and Azure Functions.
 Looking at either Azure App Center or Github actions for the build process, potentially manual releases depending on time constrains.
 
 
-We want to keep the app really simple and around the talk that are going on.
+We want to keep the app really simple, no frills around the edges.
 
 ## Project Board
 
