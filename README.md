@@ -17,6 +17,13 @@ Looking at either Azure App Center or Github actions for the build process, pote
 
 We want to keep the app really simple, no frills around the edges.
 
+## Tools
+
+We'll be using [LitElement](https://lit-element.polymer-project.org/) for the UI alongside existing [material components](https://github.com/material-components/material-components-web-components)
+
+[Rollup](https://rollupjs.org/guide/en/) is the build tool.
+[Karma](http://karma-runner.github.io/4.0/index.html), [Mocha](https://mochajs.org/), [Sinon](https://sinonjs.org/) and [Chai (using Expect)](https://www.chaijs.com/guide/styles/#expect) are testing tools.
+
 ## Project Board
 
 Is available [here](https://github.com/TheDataShed/leeds-digital-festival-app/projects/1)

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Leeds Digital Festival App">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>Leeds Digital Festival App</title>
+  <meta name="description"
+    content="Leeds Digital Festival App">
+  <meta name="author" content="The DataShed">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description"
+    content="Leeds Digital Festival App">
+  <meta name="twitter:image" content="/images/manifest/icon-192x192.png">
+
+  <meta property="og:url" content="">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Leeds Digital Festival App">
+  <meta property="og:description"
+    content="Leeds Digital Festival App">
+  <meta property="og:image" content="/images/manifest/icon-192x192.png">
+
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+
+  <!-- See https://goo.gl/OOhYW5 -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- See https://goo.gl/qRE0vM -->
+  <meta name="theme-color" content="#FFCD38">
+
+  <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Leeds Digital Festival App">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Leeds Digital Festival App">
+
+  <!-- Homescreen icons -->
+  <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="96x96" href="/images/manifest/icon-96x96.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/manifest/icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/images/manifest/icon-192x192.png">
+
+  <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#FFCD38">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Preload -->
+  <link rel="preload" href="/src/ldf-app.js" as="script" crossorigin>
+
+  <!-- Set up service worker -->
+  <script async>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
+
+  <!-- Load babel polyfills -->
+  <script src="/node_modules/@babel/polyfill/dist/polyfill.min.js"></script>
+
+  <!-- Load Custom Elements es5 adapter -->
+  <script src="/node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+
+  <!-- Load webcomponents to check and load any polyfills your browser needs -->
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+
+  <!-- Add any fonts here (recommend async loading) -->
+  <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+
+  <!-- Load system modules for IE11 -->
+  <script nomodule src="/legacy/s.min.js"></script>
+
+  <!-- Add any global styles for body, document, etc. -->
+  <style>
+    body {
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      color: #393A34;
+      background-color: #FAFAFA;
+      transform: transale3d(0, 0, 0);
+      -webkit-overflow-scrolling: touch;
+      padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    input,
+    select,
+    textarea,
+    button,
+    label {
+      font-family: inherit;
+    }
+  </style>
+</head>
+
+<body>
+  <ldf-app></ldf-app>
+  <noscript>
+    Please enable JavaScript to view this website.
+  </noscript>
+
+
+  <!-- Check if dynamic imports supported, this will throw if dynamic import is not supported -->
+  <script type="module">
+    window.esDynamicImport = true;
+    import('/src/ldf-app.js');
+  </script>
+
+  <!-- This will load in all the nomodule scripts for browsers that don't support lazy loading (imports not at the top level) e.g. Firefox -->
+  <script type="module">
+    if (!window.esDynamicImport) {
+      const noms = Array.prototype.slice.call(document.getElementsByTagName('script'), 0).filter(x => x.hasAttribute('nomodule'));
+      function nextLoad(nom, s) {
+        if (!(nom = noms.shift())) return;
+        s = document.createElement('script');
+        if (nom.src) s.src = nom.src, s.addEventListener('load', nextLoad), s.addEventListener('error', nextLoad);
+        else s.innerHTML = nom.innerHTML;
+        document.head.appendChild(s);
+        if (!nom.src) nextLoad();
+      }
+      nextLoad();
+    }
+  </script>
+
+  <script nomodule>
+    System.import('/legacy/src/ldf-app.js');
+  </script>
+</body>
+
+</html>
