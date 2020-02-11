@@ -136,6 +136,12 @@ export class LDFApp extends LitElement {
       routeData: { type: Object },
       /** Any query params in the url */
       queryParams: { type: Object },
+      /** The list of talks */
+      talks: { type: Array },
+      /** If loading the list of talks */
+      isLoading: { type: Boolean },
+      /** If errored the list of talks */
+      isError: { type: Boolean },
     };
   }
 
@@ -146,15 +152,21 @@ export class LDFApp extends LitElement {
       params: {},
     };
     this.queryParams = {};
-
+    this.talks = [];
+    this.isLoading = false;
+    this.isError = false;
     this.routing();
   }
 
   /** Add any event listeners */
-  connectedCallback() {
+  async connectedCallback() {
     if (super.connectedCallback) {
       super.connectedCallback();
     }
+    if (!window.fetch) {
+      await import('whatwg-fetch');
+    }
+    this.loadTalks();
   }
 
   /** Remove any event listeners */
@@ -230,6 +242,25 @@ export class LDFApp extends LitElement {
    */
   toggleDrawer() {
     this.drawer.open = !this.drawer.open;
+  }
+
+  /**
+   * Load the talks list from blob
+   */
+  async loadTalks() {
+    try {
+      this.isLoading = true;
+      const response = await fetch('./talks.json');
+      if (response.ok) {
+        this.talks = await response.json();
+      } else {
+        this.isError = true;
+      }
+    } catch (e) {
+      this.isError = true;
+      // send error to app insights
+    }
+    this.isLoading = false;
   }
 }
 
