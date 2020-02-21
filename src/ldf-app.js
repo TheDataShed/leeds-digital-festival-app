@@ -8,7 +8,6 @@ import { sharedStyles } from './shared-styles';
 import {
   parseQueryParams, validatePage, importPage, trackPageChanges,
 } from './elements/router';
-
 /**
  * `ldf-app`
  * The app shell to do all the routing and what not

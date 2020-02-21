@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
+import '../elements/talk-overview';
 
 /**
  * `home-page`
