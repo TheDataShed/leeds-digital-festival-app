@@ -24,6 +24,28 @@ export class LDFApp extends LitElement {
           color: var(--black-color);
         }
 
+        mwc-top-app-bar {
+          --mdc-theme-primary: var(--grey-color);
+          --mdc-theme-on-primary: var(--black-color);
+        }
+
+        a.logo {
+          display: flex;
+        }
+
+        a.logo>img.logo {
+          height: 60px;
+          margin: auto;
+        }
+
+        p[slot="actionItems"] {
+          margin-right: 4em;
+        }
+
+        p[slot="actionItems"].hashtag {
+          color: var(--pink-color);
+        }
+
         #drawer>nav {
           flex-direction: column;
           height: 92%;
@@ -39,7 +61,7 @@ export class LDFApp extends LitElement {
         }
 
         #drawer>nav>a[data-selected] {
-          border-left: 5px solid var(--yellow-color);
+          border-left: 5px solid var(--pink-color);
           font-weight: bold;
         }
 
@@ -77,12 +99,16 @@ export class LDFApp extends LitElement {
           }
 
           .mobile-menu>a[data-selected] {
-            border-bottom: 5px solid var(--yellow-color);
+            border-bottom: 5px solid var(--pink-color);
             font-weight: bold;
           }
 
           iron-pages {
             margin-bottom: 100px;
+          }
+
+          p[slot="actionItems"] {
+            display: none;
           }
       }
       `;
@@ -96,22 +122,27 @@ export class LDFApp extends LitElement {
    */
   render() {
     return html`
-    <mwc-drawer hasheader type="dismissible">
-      <span slot="title">Drawer Title</span>
+    <mwc-drawer hasheader type="modal">
+      <span slot="title">Menu</span>
       <div id="drawer" class="drawer-content">
-        <p>Drawer content</p>
         <nav role="navigation">
           <a href="/home" ?data-selected=${this.page === 'home'}>HOME</a>
         </nav>
       </div>
       <div slot="appContent">
-        <mwc-top-app-bar @MDCTopAppBar:nav=${this.toggleDrawer}>
-          <mwc-icon-button class="menu" slot="navigationIcon" icon="menu"></mwc-icon-button>
-          <div slot="title">Title</div>
+        <mwc-top-app-bar @MDCTopAppBar:nav=${this.toggleDrawer} ?centerTitle=${this.isMobile}>
+          <mwc-icon-button class="menu" slot="navigationIcon" icon="menu" label="Menu Button"></mwc-icon-button>
+          <div slot="title">
+            <a class="logo" href="/home">
+              <img class="logo" src="/images/ldf_2020_logo.png" alt="Leeds Digital Festival Logo">
+            </a>
+          </div>
+          <p class="dates" slot="actionItems">20th April to 1st May</p>
+          <p class="hashtag" slot="actionItems">#LeedsDigi20</p>
         </mwc-top-app-bar>
         <div class="main-content">
           <div class="pages" role="main">
-            <home-page name="home" ?hidden=${this.page !== 'home'}></home-page>
+            <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favoriteTalks=${this.favoriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></home-page>
             <privacy-page name="privacy" ?hidden=${this.page !== 'privacy'}></privacy-page>
             <terms-page name="terms" ?hidden=${this.page !== 'terms'}></terms-page>
             <lost-page name="lost" ?hidden=${this.page !== 'lost'}></lost-page>
@@ -136,11 +167,15 @@ export class LDFApp extends LitElement {
       routeData: { type: Object },
       /** Any query params in the url */
       queryParams: { type: Object },
+      /** If its a mobile size device */
+      isMobile: { type: Boolean },
       /** The list of talks */
       talks: { type: Array },
-      /** If loading the list of talks */
+      /** The list of favorited talks */
+      favoriteTalks: { type: Array },
+      /** If the list of talks is loading */
       isLoading: { type: Boolean },
-      /** If errored the list of talks */
+      /** If the list of talks has errored */
       isError: { type: Boolean },
     };
   }
@@ -152,10 +187,13 @@ export class LDFApp extends LitElement {
       params: {},
     };
     this.queryParams = {};
-    this.talks = [];
+    this.isMobile = false;
+    this.routing();
+
     this.isLoading = false;
     this.isError = false;
-    this.routing();
+    this.talks = [];
+    this.favoriteTalks = [];
   }
 
   /** Add any event listeners */
@@ -167,6 +205,8 @@ export class LDFApp extends LitElement {
       await import('whatwg-fetch');
     }
     this.loadTalks();
+    const isMobileQuery = window.matchMedia('(max-width: 769px)');
+    isMobileQuery.addListener(({ matches }) => { this.isMobile = matches; });
   }
 
   /** Remove any event listeners */

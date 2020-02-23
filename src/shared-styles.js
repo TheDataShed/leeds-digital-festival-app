@@ -4,9 +4,11 @@ import { css } from 'lit-element/lit-element';
 export const sharedStyles = css`
       html,
       :host>* {
-        --yellow-color: #FFCD38;
-        --black-color: #393A34;
-        --white-color: #fff;
+        --pink-color: #E200B2;
+        --blue-color: #1B1464;
+        --black-color: #1D1D1B;
+        --grey-color: #F5F5F5;
+        --white-color: #FFFFFF;
         --error-color: red;
       }
 
