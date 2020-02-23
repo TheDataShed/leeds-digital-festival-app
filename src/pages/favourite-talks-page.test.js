@@ -13,14 +13,14 @@ describe('favourite-talks-page tests', () => {
     node.remove();
   });
 
-  it('should render only the list of favorited talks', async () => {
+  it('should render only the list of favourited talks', async () => {
     node.talks = [
       { id: '1' },
       { id: '2' },
       { id: '3' },
       { id: '4' },
     ];
-    node.favoriteTalks = ['1', '3'];
+    node.favouriteTalks = ['1', '3'];
     await node.updateComplete;
 
     const talks = node.shadowRoot.querySelectorAll('talk-overview');

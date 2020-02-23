@@ -3,7 +3,7 @@ import { sharedStyles } from '../shared-styles';
 
 /**
  * `favourite-talks-page`
- * Page to display favorited talks
+ * Page to display favourited talks
  *
  * @customElement
  */
@@ -30,13 +30,13 @@ export class FavouriteTalksPage extends LitElement {
  */
   render() {
     return html`
-        <h2>Favorite Talks</h2>
+        <h2>Favourite Talks</h2>
         <loading-display ?hidden=${!this.isLoading} label=""></loading-display>
         <error-display ?hidden=${!this.isError} label=""></error-display>
         <div class="list">
           ${this.talks
-    .filter(talk => this.favoriteTalks.indexOf(talk.id) > -1)
-    .map(talk => html`<talk-overview .talk=${talk} isfavorite></talk-overview>`)}
+    .filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)
+    .map(talk => html`<talk-overview .talk=${talk} isfavourite></talk-overview>`)}
         </div>
     `;
   }
@@ -46,8 +46,8 @@ export class FavouriteTalksPage extends LitElement {
     return {
       /** The list of talks */
       talks: { type: Array },
-      /** The list of favorited talks */
-      favoriteTalks: { type: Array },
+      /** The list of favourited talks */
+      favouriteTalks: { type: Array },
       /** If the list of talks is loading */
       isLoading: { type: Boolean },
       /** If the list of talks has errored */
@@ -61,7 +61,7 @@ export class FavouriteTalksPage extends LitElement {
     this.isLoading = false;
     this.isError = false;
     this.talks = [];
-    this.favoriteTalks = [];
+    this.favouriteTalks = [];
   }
 }
 
