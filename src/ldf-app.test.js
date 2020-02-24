@@ -94,9 +94,21 @@ describe('ldf-app tests', () => {
   it('should highlight the home links when selected', async () => {
     node.page = 'home';
     await node.updateComplete;
-    const links = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
-    expect(links.length).to.equal(2);
-    expect(Array.from(links).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
+    const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
+    const favoriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favorites"]');
+    expect(homeLinks.length).to.equal(2);
+    expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
+    expect(Array.from(favoriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
+  });
+
+  it('should highlight the favorites links when selected', async () => {
+    node.page = 'favorites';
+    await node.updateComplete;
+    const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
+    const favoriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favorites"]');
+    expect(favoriteLinks.length).to.equal(2);
+    expect(Array.from(favoriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
+    expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
   });
 
   it('should load the talks', async () => {

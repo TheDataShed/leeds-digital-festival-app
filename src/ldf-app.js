@@ -127,6 +127,10 @@ export class LDFApp extends LitElement {
       <div id="drawer" class="drawer-content">
         <nav role="navigation">
           <a href="/home" ?data-selected=${this.page === 'home'}>HOME</a>
+          <a href="/favorites" ?data-selected=${this.page === 'favorites'}>
+            <mwc-icon>favorite</mwc-icon>
+            <p>FAVORITE TALKS</p>
+          </a>
         </nav>
       </div>
       <div slot="appContent">
@@ -143,14 +147,19 @@ export class LDFApp extends LitElement {
         <div class="main-content">
           <div class="pages" role="main">
             <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favoriteTalks=${this.favoriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></home-page>
+            <favourite-talks-page name="favorites" ?hidden=${this.page !== 'favorites'} .talks=${this.talks} .favoriteTalks=${this.favoriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></favourite-talks-page>
             <privacy-page name="privacy" ?hidden=${this.page !== 'privacy'}></privacy-page>
             <terms-page name="terms" ?hidden=${this.page !== 'terms'}></terms-page>
             <lost-page name="lost" ?hidden=${this.page !== 'lost'}></lost-page>
           </div>
           <nav class="mobile-menu">
             <a href="/home" ?data-selected=${this.page === 'home'}>
-              <mwc-icon icon=""></mwc-icon>
+              <mwc-icon>home</mwc-icon>
               <p>HOME</p>
+            </a>
+            <a href="/favorites" ?data-selected=${this.page === 'favorites'}>
+              <mwc-icon>favorite</mwc-icon>
+              <p>FAVORITE TALKS</p>
             </a>
           </nav>
         </div>
