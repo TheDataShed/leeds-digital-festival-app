@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
+import '../elements/error-display';
+import '../elements/loading-display';
 import '../elements/talk-overview';
 
 /**
@@ -60,10 +62,10 @@ export class HomePage extends LitElement {
       </div>
       <div class="talks">
         <h3>Talks</h3>
-        <loading-display ?hidden=${!this.isLoading} label=""></loading-display>
-        <error-display ?hidden=${!this.isError} label=""></error-display>
+        <loading-display ?hidden=${!this.isLoading}></loading-display>
+        <error-display ?hidden=${!this.isError}></error-display>
         <div class="list">
-          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourite=${this.isTalkFavourited(talk)}></talk-overview>`)}
+          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)}></talk-overview>`)}
         </div>
       </div>
     `;

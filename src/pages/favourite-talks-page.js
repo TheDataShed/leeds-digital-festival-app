@@ -1,5 +1,8 @@
 import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
+import '../elements/error-display';
+import '../elements/loading-display';
+import '../elements/talk-overview';
 
 /**
  * `favourite-talks-page`
@@ -31,12 +34,12 @@ export class FavouriteTalksPage extends LitElement {
   render() {
     return html`
         <h2>Favourite Talks</h2>
-        <loading-display ?hidden=${!this.isLoading} label=""></loading-display>
-        <error-display ?hidden=${!this.isError} label=""></error-display>
+        <loading-display ?hidden=${!this.isLoading}></loading-display>
+        <error-display ?hidden=${!this.isError}></error-display>
         <div class="list">
           ${this.talks
     .filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)
-    .map(talk => html`<talk-overview .talk=${talk} isfavourite></talk-overview>`)}
+    .map(talk => html`<talk-overview .talk=${talk} isFavourited></talk-overview>`)}
         </div>
     `;
   }
