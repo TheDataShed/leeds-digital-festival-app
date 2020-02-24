@@ -7,21 +7,18 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
   <title>Leeds Digital Festival App</title>
-  <meta name="description"
-    content="Leeds Digital Festival App">
+  <meta name="description" content="Leeds Digital Festival App">
   <meta name="author" content="The DataShed">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="">
   <meta name="twitter:title" content="">
-  <meta name="twitter:description"
-    content="Leeds Digital Festival App">
+  <meta name="twitter:description" content="Leeds Digital Festival App">
   <meta name="twitter:image" content="/images/manifest/icon-192x192.png">
 
   <meta property="og:url" content="">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Leeds Digital Festival App">
-  <meta property="og:description"
-    content="Leeds Digital Festival App">
+  <meta property="og:description" content="Leeds Digital Festival App">
   <meta property="og:image" content="/images/manifest/icon-192x192.png">
 
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -70,10 +67,10 @@
   <script src="/node_modules/@babel/polyfill/dist/polyfill.min.js"></script>
 
   <!-- Load Custom Elements es5 adapter -->
-  <script src="/node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+  <script nomodule src="/node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
 
   <!-- Load webcomponents to check and load any polyfills your browser needs -->
-  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script nomodule src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
   <!-- Add any fonts here (recommend async loading) -->
   <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
@@ -83,13 +80,22 @@
 
   <!-- Add any global styles for body, document, etc. -->
   <style>
+    @font-face {
+        font-family: "ahamono";
+        src: url('/assets/fonts/AHAMONO-Regular.woff2');
+    }
+    @font-face {
+        font-family: "worksans";
+        src: url('/assets/fonts/worksans.woff2');
+    }
+
     body {
       margin: 0;
-      font-family: "Roboto", sans-serif;
+      font-family: "ahamono", "worksans", sans-serif;
       line-height: 1.5;
       min-height: 100vh;
       color: #1D1D1B;
-      background-color: #1D1D1B;
+      background-color: #E2E2E2;
       transform: transale3d(0, 0, 0);
       -webkit-overflow-scrolling: touch;
       padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);

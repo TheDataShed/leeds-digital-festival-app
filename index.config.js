@@ -3,7 +3,7 @@ const { minify } = require('html-minifier');
 
 const html = fs.readFileSync('./index.html');
 
-const result = minify(html.toString(), {
+const result = minify(html.toString().replace('/assets', ''), {
   collapseWhitespace: true,
   removeComments: true,
   minifyJS: true,

@@ -41,7 +41,7 @@ describe('ldf-app constructor tests', () => {
     document.body.appendChild(app);
     await app.updateComplete;
     expect(fetchStub.callCount).to.equal(1);
-    expect(fetchStub.firstCall.args[0]).to.equal('./talks.json');
+    expect(fetchStub.firstCall.args[0]).to.equal('/talks.json');
     await app.updateComplete;
     expect(app.talks).to.deep.equal([
       {
@@ -149,7 +149,7 @@ describe('ldf-app tests', () => {
     expect(node.talks).to.deep.equal(expectedTalks);
     expect(node.isError).to.be.false;
     expect(node.isLoading).to.be.false;
-    expect(fetchStub.firstCall.args[0]).to.equal('./talks.json');
+    expect(fetchStub.firstCall.args[0]).to.equal('/talks.json');
   });
 
   it('should not explode if failing to load the talks and set isError state', async () => {

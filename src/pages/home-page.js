@@ -20,15 +20,17 @@ export class HomePage extends LitElement {
 
         .header {
           text-align: center;
-          margin: 5em;
+          padding: 2em;
+          background-image:linear-gradient(to bottom left,#1d1d1b,#3e3e3a);
         }
 
         .header>h1 {
+          font-size: 2.25em;
           color: var(--white-color);
         }
 
         .header>h2 {
-          color: var(--grey-color);
+          color: var(--light-grey-color);
         }
 
         .header>h2.hashtag {
@@ -36,11 +38,8 @@ export class HomePage extends LitElement {
         }
 
         .talks {
-          background-color: var(--grey-color);
-        }
-
-        .talks>h3 {
-          padding-left: 5em;
+          background-color: var(--pink-color);
+          padding: 2em;
         }
       }
       `;
@@ -54,20 +53,19 @@ export class HomePage extends LitElement {
  */
   render() {
     return html`
-      <div class="header">
+      <section class="header">
         <h1>LEEDS: THE DIGITAL<br>
         CAPITAL OF THE NORTH</h1>
         <h2>20th April to 1st May 2020</h2>
         <h2 class="hashtag">#LeedsDigi20</h2>
-      </div>
-      <div class="talks">
-        <h3>Talks</h3>
+      </section>
+      <section class="talks">
         <loading-display ?hidden=${!this.isLoading}></loading-display>
         <error-display ?hidden=${!this.isError}></error-display>
         <div class="list">
           ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)}></talk-overview>`)}
         </div>
-      </div>
+      </section>
     `;
   }
 
