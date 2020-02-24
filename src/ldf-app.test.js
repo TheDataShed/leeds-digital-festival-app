@@ -94,7 +94,7 @@ describe('ldf-app tests', () => {
   it('should highlight the home links when selected', async () => {
     node.page = 'home';
     await node.updateComplete;
-    const links = node.shadowRoot.querySelectorAll('a[href="/home"]');
+    const links = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
     expect(links.length).to.equal(2);
     expect(Array.from(links).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
   });
