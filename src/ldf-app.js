@@ -53,16 +53,26 @@ export class LDFApp extends LitElement {
         }
 
         #drawer>nav>a {
-          padding: 10px 16px;
+          padding: 0 1em;
           text-decoration: none;
           color: var(--black-color);
           line-height: 40px;
           border-left: 5px solid var(--white-color);
+          display: flex;
         }
 
         #drawer>nav>a[data-selected] {
           border-left: 5px solid var(--pink-color);
           font-weight: bold;
+        }
+
+        #drawer>nav>a>mwc-icon {
+          --mwc-icon-size: 30px;
+          margin: auto 0;
+        }
+
+        #drawer>nav>a>p {
+          margin: auto auto auto 1em;
         }
 
         .mobile-menu {
@@ -126,7 +136,10 @@ export class LDFApp extends LitElement {
       <span slot="title">Menu</span>
       <div id="drawer" class="drawer-content">
         <nav role="navigation">
-          <a href="/home" ?data-selected=${this.page === 'home'}>HOME</a>
+          <a href="/home" ?data-selected=${this.page === 'home'}>
+            <mwc-icon>home</mwc-icon>
+            <p>HOME</p>
+          </a>
           <a href="/favorites" ?data-selected=${this.page === 'favorites'}>
             <mwc-icon>favorite</mwc-icon>
             <p>FAVORITE TALKS</p>
