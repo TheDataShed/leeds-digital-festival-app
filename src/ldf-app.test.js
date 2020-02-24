@@ -2,6 +2,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { LDFApp } from './ldf-app';
+import * as storage from './elements/storage';
 
 describe('ldf-app constructor tests', () => {
   let fetchStub;
@@ -24,8 +25,9 @@ describe('ldf-app constructor tests', () => {
     });
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     sinon.restore();
+    await storage.clearFavouriteTalks();
   });
 
   it('should call the routing service', async () => {
@@ -51,6 +53,17 @@ describe('ldf-app constructor tests', () => {
     ]);
     app.remove();
   });
+
+  it('should call to load the favourite talks', async () => {
+    storage.saveFavouriteTalks(['1', '4']);
+
+    const app = document.createElement('ldf-app');
+    document.body.appendChild(app);
+    await app.updateComplete;
+    await app.updateComplete;
+    expect(app.favouriteTalks).to.deep.equal(['1', '4']);
+    app.remove();
+  });
 });
 
 describe('ldf-app tests', () => {
@@ -61,9 +74,10 @@ describe('ldf-app tests', () => {
     await node.updateComplete;
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     node.remove();
     sinon.restore();
+    await storage.clearFavouriteTalks();
   });
 
   it('should set the page by default to home', () => {
@@ -95,19 +109,19 @@ describe('ldf-app tests', () => {
     node.page = 'home';
     await node.updateComplete;
     const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
-    const favoriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favorites"]');
+    const favouriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favourites"]');
     expect(homeLinks.length).to.equal(2);
     expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
-    expect(Array.from(favoriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
+    expect(Array.from(favouriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
   });
 
-  it('should highlight the favorites links when selected', async () => {
-    node.page = 'favorites';
+  it('should highlight the favourites links when selected', async () => {
+    node.page = 'favourites';
     await node.updateComplete;
     const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
-    const favoriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favorites"]');
-    expect(favoriteLinks.length).to.equal(2);
-    expect(Array.from(favoriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
+    const favouriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favourites"]');
+    expect(favouriteLinks.length).to.equal(2);
+    expect(Array.from(favouriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
     expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
   });
 
@@ -173,5 +187,72 @@ describe('ldf-app tests', () => {
   it('should set the loading property when loading the talks', () => {
     node.loadTalks();
     expect(node.isLoading).to.be.true;
+  });
+
+  it('should add a talk to the favourites list when receiving a talk-favourited event', async () => {
+    expect(node.favouriteTalks).to.deep.equal([]);
+
+    node.dispatchEvent(new CustomEvent('talk-favourited', {
+      detail: '1',
+      bubbles: true,
+      composed: true,
+    }));
+
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1']);
+  });
+
+  it('should not add an already favourited talk to the favourites list when receiving a talk-favourited event', async () => {
+    node.favouriteTalks = ['1'];
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1']);
+
+    node.dispatchEvent(new CustomEvent('talk-favourited', {
+      detail: '1',
+      bubbles: true,
+      composed: true,
+    }));
+
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1']);
+  });
+
+  it('should remove an already favourited talk from the favourites list when receiving a talk-unfavourited event', async () => {
+    node.favouriteTalks = ['1', '2', '3'];
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1', '2', '3']);
+
+    node.dispatchEvent(new CustomEvent('talk-unfavourited', {
+      detail: '2',
+      bubbles: true,
+      composed: true,
+    }));
+
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1', '3']);
+  });
+
+  it('should not remove an unknown talk from the favourites list when receiving a talk-unfavourited event', async () => {
+    expect(node.favouriteTalks).to.deep.equal([]);
+
+    node.dispatchEvent(new CustomEvent('talk-unfavourited', {
+      detail: '1',
+      bubbles: true,
+      composed: true,
+    }));
+
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal([]);
+  });
+
+  it('should call to save the favourite talks on change', async () => {
+    const existingTalks = await storage.loadFavouriteTalks();
+    expect(existingTalks).to.deep.equal([]);
+
+    node.favouriteTalks = ['20'];
+    await node.updateComplete;
+
+    const savedTalks = await storage.loadFavouriteTalks();
+    expect(savedTalks).to.deep.equal(['20']);
   });
 });

@@ -4,10 +4,13 @@ import '@material/mwc-icon-button';
 import '@material/mwc-top-app-bar';
 import router from 'page/page.mjs';
 import { LitElement, html, css } from 'lit-element/lit-element';
+// eslint-disable-next-line no-unused-vars
+import { Capacitor } from '@capacitor/core';
 import { sharedStyles } from './shared-styles';
 import {
   parseQueryParams, validatePage, importPage, trackPageChanges,
 } from './elements/router';
+import { loadFavouriteTalks, saveFavouriteTalks } from './elements/storage';
 /**
  * `ldf-app`
  * The app shell to do all the routing and what not
@@ -139,9 +142,9 @@ export class LDFApp extends LitElement {
             <mwc-icon>home</mwc-icon>
             <p>HOME</p>
           </a>
-          <a href="/favorites" ?data-selected=${this.page === 'favorites'}>
-            <mwc-icon>favorite</mwc-icon>
-            <p>FAVORITE TALKS</p>
+          <a href="/favourites" ?data-selected=${this.page === 'favourites'}>
+            <mwc-icon>favourite</mwc-icon>
+            <p>FAVOuRITE TALKS</p>
           </a>
         </nav>
       </div>
@@ -158,8 +161,8 @@ export class LDFApp extends LitElement {
         </mwc-top-app-bar>
         <div class="main-content">
           <div class="pages" role="main">
-            <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favoriteTalks=${this.favoriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></home-page>
-            <favourite-talks-page name="favorites" ?hidden=${this.page !== 'favorites'} .talks=${this.talks} .favoriteTalks=${this.favoriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></favourite-talks-page>
+            <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></home-page>
+            <favourite-talks-page name="favourites" ?hidden=${this.page !== 'favourites'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></favourite-talks-page>
             <privacy-page name="privacy" ?hidden=${this.page !== 'privacy'}></privacy-page>
             <terms-page name="terms" ?hidden=${this.page !== 'terms'}></terms-page>
             <lost-page name="lost" ?hidden=${this.page !== 'lost'}></lost-page>
@@ -169,9 +172,9 @@ export class LDFApp extends LitElement {
               <mwc-icon>home</mwc-icon>
               <p>HOME</p>
             </a>
-            <a href="/favorites" ?data-selected=${this.page === 'favorites'}>
-              <mwc-icon>favorite</mwc-icon>
-              <p>FAVORITE TALKS</p>
+            <a href="/favourites" ?data-selected=${this.page === 'favourites'}>
+              <mwc-icon>favourite</mwc-icon>
+              <p>FAVOuRITE TALKS</p>
             </a>
           </nav>
         </div>
@@ -192,8 +195,8 @@ export class LDFApp extends LitElement {
       isMobile: { type: Boolean },
       /** The list of talks */
       talks: { type: Array },
-      /** The list of favorited talks */
-      favoriteTalks: { type: Array },
+      /** The list of favourited talks */
+      favouriteTalks: { type: Array },
       /** If the list of talks is loading */
       isLoading: { type: Boolean },
       /** If the list of talks has errored */
@@ -214,7 +217,7 @@ export class LDFApp extends LitElement {
     this.isLoading = false;
     this.isError = false;
     this.talks = [];
-    this.favoriteTalks = [];
+    this.favouriteTalks = [];
   }
 
   /** Add any event listeners */
@@ -226,8 +229,14 @@ export class LDFApp extends LitElement {
       await import('whatwg-fetch');
     }
     this.loadTalks();
+
     const isMobileQuery = window.matchMedia('(max-width: 769px)');
     isMobileQuery.addListener(({ matches }) => { this.isMobile = matches; });
+
+    this.favouriteTalks = await loadFavouriteTalks();
+
+    this.addEventListener('talk-favourited', this.addFavouritedTalk);
+    this.addEventListener('talk-unfavourited', this.removeFavouritedTalk);
   }
 
   /** Remove any event listeners */
@@ -235,6 +244,8 @@ export class LDFApp extends LitElement {
     if (super.disconnectedCallback) {
       super.disconnectedCallback();
     }
+    this.removeEventListener('talk-favourited', this.addFavouritedTalk);
+    this.removeEventListener('talk-unfavourited', this.removeFavouritedTalk);
   }
 
   /**
@@ -254,6 +265,9 @@ export class LDFApp extends LitElement {
     }
     if (changedProperties.has('page')) {
       importPage(this.page);
+    }
+    if (changedProperties.has('favouriteTalks') && this.favouriteTalks) {
+      saveFavouriteTalks(this.favouriteTalks);
     }
   }
 
@@ -322,6 +336,29 @@ export class LDFApp extends LitElement {
       // send error to app insights
     }
     this.isLoading = false;
+  }
+
+  /**
+   * Saves a favourited talk
+   * @param {CustomEvent} event the talk-favourited event
+   */
+  async addFavouritedTalk(event) {
+    if (this.favouriteTalks.indexOf(event.detail) === -1) {
+      this.favouriteTalks.push(event.detail);
+    }
+  }
+
+  /**
+   * Removes a favourited talk
+   * @param {CustomEvent} event the talk-unfavourited event
+   */
+  async removeFavouritedTalk(event) {
+    const find = this.favouriteTalks.indexOf(event.detail);
+    if (find > -1) {
+      const existing = JSON.parse(JSON.stringify(this.favouriteTalks));
+      existing.splice(find, 1);
+      this.favouriteTalks = existing;
+    }
   }
 }
 

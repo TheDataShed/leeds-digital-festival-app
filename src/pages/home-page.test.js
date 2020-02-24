@@ -57,14 +57,14 @@ describe('home-page tests', () => {
     expect(error.hidden).to.be.false;
   });
 
-  it('should check if a talk is favorited', async () => {
-    node.favoriteTalks = ['1'];
+  it('should check if a talk is favourited', async () => {
+    node.favouriteTalks = ['1'];
     await node.updateComplete;
 
-    const expectedTrue = node.isTalkFavorited({ id: '1' });
+    const expectedTrue = node.isTalkFavourited({ id: '1' });
     expect(expectedTrue).to.be.true;
 
-    const expectedFalse = node.isTalkFavorited({ id: '2' });
+    const expectedFalse = node.isTalkFavourited({ id: '2' });
     expect(expectedFalse).to.be.false;
   });
 });

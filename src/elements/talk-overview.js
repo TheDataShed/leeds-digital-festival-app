@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
 import { formatDate } from './formatters';
-import './favorite-talk';
+import './favourite-talk';
 
 /**
  * `talk-overview`
@@ -42,7 +42,7 @@ export class TalkOverview extends LitElement {
             </div>
             <div class="content">${this.talk.description.substr(0, 200)}...</div>
             <div class="footer">
-                <favorite-talk ?isFavorited=${this.isFavorited} .talk=${this.talk}></favorite-talk>
+                <favourite-talk ?isFavourited=${this.isFavourited} .talk=${this.talk}></favourite-talk>
             </div>
     `;
   }
@@ -53,7 +53,7 @@ export class TalkOverview extends LitElement {
       /** The talk information */
       talk: { type: Object },
       /** If the talk is a favourite */
-      isFavorited: { type: Boolean },
+      isFavourited: { type: Boolean },
     };
   }
 
@@ -61,7 +61,7 @@ export class TalkOverview extends LitElement {
   constructor() {
     super();
     this.talk = {};
-    this.isFavorited = false;
+    this.isFavourited = false;
   }
 }
 

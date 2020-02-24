@@ -63,7 +63,7 @@ export class HomePage extends LitElement {
         <loading-display ?hidden=${!this.isLoading} label=""></loading-display>
         <error-display ?hidden=${!this.isError} label=""></error-display>
         <div class="list">
-          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavorite=${this.isTalkFavorited(talk)}></talk-overview>`)}
+          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourite=${this.isTalkFavourited(talk)}></talk-overview>`)}
         </div>
       </div>
     `;
@@ -74,8 +74,8 @@ export class HomePage extends LitElement {
     return {
       /** The list of talks */
       talks: { type: Array },
-      /** The list of favorited talks */
-      favoriteTalks: { type: Array },
+      /** The list of favourited talks */
+      favouriteTalks: { type: Array },
       /** If the list of talks is loading */
       isLoading: { type: Boolean },
       /** If the list of talks has errored */
@@ -89,16 +89,16 @@ export class HomePage extends LitElement {
     this.isLoading = false;
     this.isError = false;
     this.talks = [];
-    this.favoriteTalks = [];
+    this.favouriteTalks = [];
   }
 
   /**
-   * Checks the list of favorited talk ids to see if a talk is favoured
+   * Checks the list of favourited talk ids to see if a talk is favoured
    * @param {Object} talk the talk info
-   * @return {Boolean} if the talk is in the favorite list
+   * @return {Boolean} if the talk is in the favourite list
    */
-  isTalkFavorited(talk) {
-    return this.favoriteTalks.indexOf(talk.id) > -1;
+  isTalkFavourited(talk) {
+    return this.favouriteTalks.indexOf(talk.id) > -1;
   }
 }
 

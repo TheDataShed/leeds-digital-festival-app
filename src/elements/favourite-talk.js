@@ -3,12 +3,12 @@ import { sharedStyles } from '../shared-styles';
 import '@material/mwc-icon-button-toggle';
 
 /**
- * `favorite-talk`
+ * `favourite-talk`
  * Handle favouring a talk
  *
  * @customElement
  */
-export class FavoriteTalk extends LitElement {
+export class FavouriteTalk extends LitElement {
   /** Defines the elements styles */
   static get styles() {
     const style = css`
@@ -31,10 +31,10 @@ export class FavoriteTalk extends LitElement {
   render() {
     return html`
         <mwc-icon-button-toggle
-            ?on=${this.isFavorited}
+            ?on=${this.isFavourited}
             onIcon="favorite"
             offIcon="favorite_border"
-            label="Favorite Talk Button"
+            label="Favourite Talk Button"
             @MDCIconButtonToggle:change="${this.toggle}"></mwc-icon-button-toggle>
     `;
   }
@@ -45,7 +45,7 @@ export class FavoriteTalk extends LitElement {
       /** The talk information */
       talk: { type: Object },
       /** If the talk is a favourite */
-      isFavorited: { type: Boolean },
+      isFavourited: { type: Boolean },
     };
   }
 
@@ -53,7 +53,7 @@ export class FavoriteTalk extends LitElement {
   constructor() {
     super();
     this.talk = {};
-    this.isFavorited = false;
+    this.isFavourited = false;
   }
 
   /**
@@ -61,7 +61,7 @@ export class FavoriteTalk extends LitElement {
      * @param {CustomEvent} event
      */
   toggle(event) {
-    const eventName = (event.detail.isOn ? 'talk-favorited' : 'talk-unfavorited');
+    const eventName = (event.detail.isOn ? 'talk-favourited' : 'talk-unfavourited');
     this.dispatchEvent(new CustomEvent(eventName, {
       detail: this.talk.id,
       bubbles: true,
@@ -70,4 +70,4 @@ export class FavoriteTalk extends LitElement {
   }
 }
 
-window.customElements.define('favorite-talk', FavoriteTalk);
+window.customElements.define('favourite-talk', FavouriteTalk);

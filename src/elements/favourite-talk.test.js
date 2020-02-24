@@ -1,11 +1,11 @@
 import sinon from 'sinon';
 import { expect } from 'chai';
-import './favorite-talk';
+import './favourite-talk';
 
-describe('favorite-talk tests', () => {
+describe('favourite-talk tests', () => {
   let node;
   beforeEach(async () => {
-    node = document.createElement('favorite-talk');
+    node = document.createElement('favourite-talk');
     node.talk = {
       id: '1234567890',
     };
@@ -21,7 +21,7 @@ describe('favorite-talk tests', () => {
     const button = node.shadowRoot.querySelector('mwc-icon-button-toggle');
     expect(button.onIcon).to.equal('favorite');
     expect(button.offIcon).to.equal('favorite_border');
-    expect(button.label).to.equal('Favorite Talk Button');
+    expect(button.label).to.equal('Favourite Talk Button');
   });
 
   it('should be off by default', () => {
@@ -29,16 +29,16 @@ describe('favorite-talk tests', () => {
     expect(button.on).to.be.false;
   });
 
-  it('should be on if favorited', async () => {
-    node.isFavorited = true;
+  it('should be on if favourited', async () => {
+    node.isFavourited = true;
     await node.updateComplete;
     const button = node.shadowRoot.querySelector('mwc-icon-button-toggle');
     expect(button.on).to.be.true;
   });
 
-  it('should fire an favorited event when clicked', async () => {
+  it('should fire an favourited event when clicked', async () => {
     const spy = sinon.spy();
-    node.addEventListener('talk-favorited', spy);
+    node.addEventListener('talk-favourited', spy);
 
     const toggle = node.shadowRoot.querySelector('mwc-icon-button-toggle');
     const button = toggle.shadowRoot.querySelector('button');
@@ -51,12 +51,12 @@ describe('favorite-talk tests', () => {
     expect(toggle.on).to.be.true;
   });
 
-  it('should fire an unfavorited event when clicked and already favorited', async () => {
-    node.isFavorited = true;
+  it('should fire an unfavourited event when clicked and already favourited', async () => {
+    node.isFavourited = true;
     await node.updateComplete;
 
     const spy = sinon.spy();
-    node.addEventListener('talk-unfavorited', spy);
+    node.addEventListener('talk-unfavourited', spy);
 
     const toggle = node.shadowRoot.querySelector('mwc-icon-button-toggle');
     const button = toggle.shadowRoot.querySelector('button');

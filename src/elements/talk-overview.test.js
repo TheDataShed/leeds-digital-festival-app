@@ -54,11 +54,11 @@ describe('talk-overview tests', () => {
     expect(content.textContent).to.equal('Spicy jalapeno bacon ipsum dolor amet spare ribs venison cow short ribs t-bone ground round boudin alcatra. Shankle fatback chicken salami, pancetta corned beef meatloaf. Tongue fatback chuck jerky sh...');
   });
 
-  it('should pass talk and favorited information into the favorite-talk element', async () => {
-    node.isFavorited = true;
+  it('should pass talk and favourited information into the favourite-talk element', async () => {
+    node.isFavourited = true;
     await node.updateComplete;
-    const favorite = node.shadowRoot.querySelector('favorite-talk');
-    expect(favorite.isFavorited).to.be.true;
-    expect(favorite.talk).to.deep.equal(node.talk);
+    const favourite = node.shadowRoot.querySelector('favourite-talk');
+    expect(favourite.isFavourited).to.be.true;
+    expect(favourite.talk).to.deep.equal(node.talk);
   });
 });
