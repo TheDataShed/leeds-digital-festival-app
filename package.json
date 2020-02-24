@@ -99,6 +99,7 @@
     "lit-html": "^1.1.2",
     "page": "^1.11.5",
     "systemjs": "^3.1.6",
+    "wc-spinners": "^1.0.0",
     "whatwg-fetch": "^3.0.0"
   },
   "resolutions": {
