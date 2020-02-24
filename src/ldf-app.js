@@ -143,8 +143,8 @@ export class LDFApp extends LitElement {
             <p>HOME</p>
           </a>
           <a href="/favourites" ?data-selected=${this.page === 'favourites'}>
-            <mwc-icon>favourite</mwc-icon>
-            <p>FAVOuRITE TALKS</p>
+            <mwc-icon>favorite</mwc-icon>
+            <p>FAVOURITE TALKS</p>
           </a>
         </nav>
       </div>
@@ -173,8 +173,8 @@ export class LDFApp extends LitElement {
               <p>HOME</p>
             </a>
             <a href="/favourites" ?data-selected=${this.page === 'favourites'}>
-              <mwc-icon>favourite</mwc-icon>
-              <p>FAVOuRITE TALKS</p>
+              <mwc-icon>favorite</mwc-icon>
+              <p>FAVOURITE TALKS</p>
             </a>
           </nav>
         </div>
@@ -344,7 +344,9 @@ export class LDFApp extends LitElement {
    */
   async addFavouritedTalk(event) {
     if (this.favouriteTalks.indexOf(event.detail) === -1) {
-      this.favouriteTalks.push(event.detail);
+      const existing = JSON.parse(JSON.stringify(this.favouriteTalks));
+      existing.push(event.detail);
+      this.favouriteTalks = existing;
     }
   }
 

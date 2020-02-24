@@ -202,6 +202,22 @@ describe('ldf-app tests', () => {
     expect(node.favouriteTalks).to.deep.equal(['1']);
   });
 
+  it('should add a talk to the favourites list when receiving a talk-favourited event and save the change', async () => {
+    expect(node.favouriteTalks).to.deep.equal([]);
+
+    node.dispatchEvent(new CustomEvent('talk-favourited', {
+      detail: '1',
+      bubbles: true,
+      composed: true,
+    }));
+
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1']);
+
+    const savedTalks = await storage.loadFavouriteTalks();
+    expect(savedTalks).to.deep.equal(['1']);
+  });
+
   it('should not add an already favourited talk to the favourites list when receiving a talk-favourited event', async () => {
     node.favouriteTalks = ['1'];
     await node.updateComplete;
@@ -230,6 +246,24 @@ describe('ldf-app tests', () => {
 
     await node.updateComplete;
     expect(node.favouriteTalks).to.deep.equal(['1', '3']);
+  });
+
+  it('should remove an already favourited talk from the favourites list and save the change', async () => {
+    node.favouriteTalks = ['1', '2', '3'];
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1', '2', '3']);
+
+    node.dispatchEvent(new CustomEvent('talk-unfavourited', {
+      detail: '2',
+      bubbles: true,
+      composed: true,
+    }));
+
+    await node.updateComplete;
+    expect(node.favouriteTalks).to.deep.equal(['1', '3']);
+
+    const savedTalks = await storage.loadFavouriteTalks();
+    expect(savedTalks).to.deep.equal(['1', '3']);
   });
 
   it('should not remove an unknown talk from the favourites list when receiving a talk-unfavourited event', async () => {
