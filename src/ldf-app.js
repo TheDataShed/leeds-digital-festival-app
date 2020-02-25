@@ -29,6 +29,11 @@ export class LDFApp extends LitElement {
         mwc-top-app-bar {
           --mdc-theme-primary: var(--light-grey-color);
           --mdc-theme-on-primary: var(--black-color);
+          color: var(--black-color);
+        }
+
+        div[slot="appContent"] {
+          min-height: 100vh;
         }
 
         a.logo {
@@ -55,7 +60,8 @@ export class LDFApp extends LitElement {
         }
 
         #drawer>nav>a {
-          padding: 0 1em;
+          font-size: 1em;
+          padding: 0.25em 1em;
           text-decoration: none;
           color: var(--black-color);
           line-height: 40px;
@@ -167,6 +173,7 @@ export class LDFApp extends LitElement {
           <div class="pages" role="main">
             <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></home-page>
             <favourite-talks-page name="favourites" ?hidden=${this.page !== 'favourites'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></favourite-talks-page>
+            <talk-page name="talk" ?hidden=${this.page !== 'talk'} .routeData=${this.routeData} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></talk-page>
             <privacy-page name="privacy" ?hidden=${this.page !== 'privacy'}></privacy-page>
             <terms-page name="terms" ?hidden=${this.page !== 'terms'}></terms-page>
             <sponsors-page name="sponsors" ?hidden=${this.page !== 'sponsors'}></sponsors-page>
@@ -290,6 +297,11 @@ export class LDFApp extends LitElement {
     router('/', (context) => {
       const { ...routeData } = context;
       routeData.params.page = 'home';
+      this.routeData = routeData;
+    });
+    router('/talk/:id', (context) => {
+      const { ...routeData } = context;
+      routeData.params.page = 'talk';
       this.routeData = routeData;
     });
     // Browsing to /home tries to take you to that page

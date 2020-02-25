@@ -21,7 +21,7 @@ export class HomePage extends LitElement {
         .header {
           text-align: center;
           padding: 2em;
-          background-image:linear-gradient(to bottom left,#1d1d1b,#3e3e3a);
+          background-image:linear-gradient(to bottom left,#1D1D1B,#3E3E3A);
         }
 
         .header>h1 {

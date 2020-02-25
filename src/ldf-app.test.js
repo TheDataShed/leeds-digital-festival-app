@@ -110,9 +110,11 @@ describe('ldf-app tests', () => {
     await node.updateComplete;
     const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
     const favouriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favourites"]');
+    const sponsorLinks = node.shadowRoot.querySelectorAll('nav>a[href="/sponsors"]');
     expect(homeLinks.length).to.equal(2);
     expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
     expect(Array.from(favouriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
+    expect(Array.from(sponsorLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false]);
   });
 
   it('should highlight the favourites links when selected', async () => {
@@ -120,9 +122,24 @@ describe('ldf-app tests', () => {
     await node.updateComplete;
     const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
     const favouriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favourites"]');
+    const sponsorLinks = node.shadowRoot.querySelectorAll('nav>a[href="/sponsors"]');
     expect(favouriteLinks.length).to.equal(2);
-    expect(Array.from(favouriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
     expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
+    expect(Array.from(favouriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true, true]);
+    expect(Array.from(sponsorLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false]);
+  });
+
+  it('should highlight the sponsors links when selected', async () => {
+    node.page = 'sponsors';
+    await node.updateComplete;
+    const homeLinks = node.shadowRoot.querySelectorAll('nav>a[href="/home"]');
+    const favouriteLinks = node.shadowRoot.querySelectorAll('nav>a[href="/favourites"]');
+    const sponsorLinks = node.shadowRoot.querySelectorAll('nav>a[href="/sponsors"]');
+    // Only one link as not in mobile menu
+    expect(sponsorLinks.length).to.equal(1);
+    expect(Array.from(homeLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
+    expect(Array.from(favouriteLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([false, false]);
+    expect(Array.from(sponsorLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true]);
   });
 
   it('should load the talks', async () => {

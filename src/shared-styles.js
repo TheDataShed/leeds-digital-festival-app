@@ -6,6 +6,7 @@ export const sharedStyles = css`
       :host>* {
         --pink-color: #E200B2;
         --blue-color: #0511f5;
+        --light-black-color: #3E3E3A;
         --black-color: #1D1D1B;
         --light-grey-color: #F5F5F5;
         --grey-color: #EAEAEA;

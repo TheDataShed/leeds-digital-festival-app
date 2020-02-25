@@ -21,8 +21,9 @@ export class ShareTalk extends LitElement {
             display: block;
         }
 
-        mwc-icon-button {
-            --mdc-icon-size: var(--icon-size, 24px)
+        mwc-icon-button.share {
+            --mdc-icon-size: var(--icon-size, 24px);
+            --mdc-icon-button-size: var(--button-size, 48px);
         }
       `;
 
@@ -36,12 +37,13 @@ export class ShareTalk extends LitElement {
   render() {
     return html`
       <mwc-icon-button
+        class="share"
         label="Share Talk"
         icon="share"
         @click=${this.share}></mwc-icon-button>
 
         <mwc-snackbar id="copied"
-              labelText="Copied a link to ${this.talk.title}."
+              labelText="Copied a link to the talk '${this.talk.title}'."
               timeoutMs=4000>
           <mwc-icon-button icon="close" slot="dismiss"></mwc-icon-button>
         </mwc-snackbar>

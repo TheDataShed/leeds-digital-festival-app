@@ -55,7 +55,7 @@ describe('share-talk tests', () => {
 
     expect(clipboardSpy.callCount).to.equal(1);
     expect(clipboardSpy.firstCall.args[0]).to.include('/talk/1234567890');
-    expect(snackbar.labelText).to.equal('Copied a link to TITLE.');
+    expect(snackbar.labelText).to.equal('Copied a link to the talk \'TITLE\'.');
     expect(snackbarSpy.callCount).to.equal(1);
   });
 });
