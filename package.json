@@ -94,6 +94,7 @@
     "@material/mwc-icon": "^0.13.0",
     "@material/mwc-icon-button": "^0.13.0",
     "@material/mwc-icon-button-toggle": "^0.13.0",
+    "@material/mwc-snackbar": "^0.13.0",
     "@material/mwc-top-app-bar": "^0.13.0",
     "@webcomponents/webcomponentsjs": "^2.4.0",
     "lit-element": "^2.2.1",

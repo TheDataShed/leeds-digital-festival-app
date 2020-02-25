@@ -31,7 +31,7 @@ export const parseQueryParams = (context) => {
 export const validatePage = (page) => {
   if (!page) {
     return 'home';
-  } if (['home', 'terms', 'privacy', 'favourites'].indexOf(page) !== -1) {
+  } if (['home', 'terms', 'privacy', 'favourites', 'sponsors'].indexOf(page) !== -1) {
     return page;
   }
   return 'lost';
@@ -50,6 +50,9 @@ export const importPage = (page) => {
       break;
     case 'favourites':
       import('../pages/favourite-talks-page');
+      break;
+    case 'sponsors':
+      import('../pages/sponsors-page');
       break;
     case 'privacy':
       import('../pages/privacy-page');

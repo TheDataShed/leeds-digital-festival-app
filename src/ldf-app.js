@@ -27,7 +27,7 @@ export class LDFApp extends LitElement {
         }
 
         mwc-top-app-bar {
-          --mdc-theme-primary: var(--grey-color);
+          --mdc-theme-primary: var(--light-grey-color);
           --mdc-theme-on-primary: var(--black-color);
         }
 
@@ -115,8 +115,8 @@ export class LDFApp extends LitElement {
             font-weight: bold;
           }
 
-          iron-pages {
-            margin-bottom: 100px;
+          .main-content {
+            margin-bottom: 65px;
           }
 
           p[slot="actionItems"] {
@@ -146,6 +146,10 @@ export class LDFApp extends LitElement {
             <mwc-icon>favorite</mwc-icon>
             <p>FAVOURITE TALKS</p>
           </a>
+          <a href="/sponsors" ?data-selected=${this.page === 'sponsors'}>
+            <mwc-icon>info</mwc-icon>
+            <p>SPONSORS</p>
+          </a>
         </nav>
       </div>
       <div slot="appContent">
@@ -165,6 +169,7 @@ export class LDFApp extends LitElement {
             <favourite-talks-page name="favourites" ?hidden=${this.page !== 'favourites'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></favourite-talks-page>
             <privacy-page name="privacy" ?hidden=${this.page !== 'privacy'}></privacy-page>
             <terms-page name="terms" ?hidden=${this.page !== 'terms'}></terms-page>
+            <sponsors-page name="sponsors" ?hidden=${this.page !== 'sponsors'}></sponsors-page>
             <lost-page name="lost" ?hidden=${this.page !== 'lost'}></lost-page>
           </div>
           <nav class="mobile-menu">
@@ -231,6 +236,7 @@ export class LDFApp extends LitElement {
     this.loadTalks();
 
     const isMobileQuery = window.matchMedia('(max-width: 769px)');
+    this.isMobile = isMobileQuery.matches;
     isMobileQuery.addListener(({ matches }) => { this.isMobile = matches; });
 
     this.favouriteTalks = await loadFavouriteTalks();
@@ -325,7 +331,7 @@ export class LDFApp extends LitElement {
   async loadTalks() {
     try {
       this.isLoading = true;
-      const response = await fetch('./talks.json');
+      const response = await fetch('/talks.json');
       if (response.ok) {
         this.talks = await response.json();
       } else {

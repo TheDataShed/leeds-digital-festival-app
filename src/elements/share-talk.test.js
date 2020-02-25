@@ -18,6 +18,7 @@ describe('share-talk tests', () => {
 
   afterEach(() => {
     node.remove();
+    sinon.restore();
   });
 
   it('should render the button', () => {
@@ -40,22 +41,21 @@ describe('share-talk tests', () => {
     });
   });
 
-  it('should be disabled and hidden if not available on the web', async () => {
-    const button = node.shadowRoot.querySelector('mwc-icon-button');
-    expect(button.hidden).to.be.true;
-    expect(button.disabled).to.be.true;
-  });
+  it('should copy a link to talk if not available on the web', async () => {
+    const stub = sinon.stub(capacitor.Plugins.Share, 'share');
+    stub.throws();
 
-  it('should be enabled and unhidden if available', async () => {
-    window.navigator.share = sinon.fake();
-    const element = document.createElement('share-talk');
-    document.body.appendChild(element);
-    await element.updateComplete;
+    const { snackbar } = node;
+    const snackbarSpy = sinon.spy(node.snackbar, 'open');
 
-    const button = element.shadowRoot.querySelector('mwc-icon-button');
-    expect(button.hidden).to.be.false;
-    expect(button.disabled).to.be.false;
-    sinon.restore();
-    element.remove();
+    const clipboardSpy = sinon.stub(window.navigator.clipboard, 'writeText');
+    clipboardSpy.resolves();
+
+    await node.share();
+
+    expect(clipboardSpy.callCount).to.equal(1);
+    expect(clipboardSpy.firstCall.args[0]).to.include('/talk/1234567890');
+    expect(snackbar.labelText).to.equal('Copied a link to TITLE.');
+    expect(snackbarSpy.callCount).to.equal(1);
   });
 });
