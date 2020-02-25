@@ -17,7 +17,8 @@ export class DirectionsTalk extends LitElement {
         }
 
         mwc-icon-button {
-            --mdc-icon-size: var(--icon-size, 24px)
+            --mdc-icon-size: var(--icon-size, 24px);
+            --mdc-icon-button-size: var(--button-size, 48px);
         }
       `;
 

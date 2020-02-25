@@ -18,8 +18,23 @@ export class FavouriteTalksPage extends LitElement {
           display: block;
         }
 
-        h2 {
-          padding-left: 5em;
+        .header {
+          text-align: center;
+          padding: 2em;
+          background-image:linear-gradient(to bottom left,#1D1D1B,#3E3E3A);
+        }
+
+        .header>h1 {
+          font-size: 2.25em;
+          color: var(--white-color);
+        }
+
+        .header>h2.hashtag {
+          color: var(--pink-color);
+        }
+
+        .list {
+          padding: 2em;
         }
       }
       `;
@@ -33,14 +48,17 @@ export class FavouriteTalksPage extends LitElement {
  */
   render() {
     return html`
-        <h2>Favourite Talks</h2>
-        <loading-display ?hidden=${!this.isLoading}></loading-display>
-        <error-display ?hidden=${!this.isError}></error-display>
-        <div class="list">
-          ${this.talks
+      <section class="header">
+        <h1>Your Favourite Talks</h1>
+        <h2 class="hashtag">#LeedsDigi20</h2>
+      </section>
+      <loading-display ?hidden=${!this.isLoading}></loading-display>
+      <error-display ?hidden=${!this.isError}></error-display>
+      <div class="list">
+        ${this.talks
     .filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)
     .map(talk => html`<talk-overview .talk=${talk} isFavourited></talk-overview>`)}
-        </div>
+      </div>
     `;
   }
 

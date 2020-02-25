@@ -43,7 +43,7 @@ describe('router tests', () => {
     });
 
     it('should return the name of the page for valid pages', () => {
-      const pages = ['home', 'terms', 'privacy', 'lost', 'favourites'];
+      const pages = ['home', 'terms', 'privacy', 'lost', 'favourites', 'talk', 'sponsors'];
       pages.forEach((page) => {
         const result = validatePage(page);
         expect(result).to.equal(page, `${page} isn't valid and being returned from the expected list of pages`);
