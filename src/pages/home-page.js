@@ -63,7 +63,7 @@ export class HomePage extends LitElement {
         <loading-display ?hidden=${!this.isLoading}></loading-display>
         <error-display ?hidden=${!this.isError}></error-display>
         <div class="list">
-          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)}></talk-overview>`)}
+          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)} .analytics=${this.analytics}></talk-overview>`)}
         </div>
       </section>
     `;
@@ -80,6 +80,8 @@ export class HomePage extends LitElement {
       isLoading: { type: Boolean },
       /** If the list of talks has errored */
       isError: { type: Boolean },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -90,6 +92,7 @@ export class HomePage extends LitElement {
     this.isError = false;
     this.talks = [];
     this.favouriteTalks = [];
+    this.analytics = {};
   }
 
   /**

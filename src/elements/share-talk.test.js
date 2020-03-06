@@ -33,12 +33,12 @@ describe('share-talk tests', () => {
     const button = node.shadowRoot.querySelector('mwc-icon-button');
     button.click();
     expect(spy.callCount).to.equal(1);
-    expect(spy.firstCall.args[0]).to.deep.equal({
-      title: 'TITLE',
-      text: 'this is a description',
-      url: 'http://localhost:8001/talk/1234567890',
-      dialogTitle: 'Share a Leeds Digital Festival Talk',
-    });
+
+    const shareCall = spy.firstCall.args[0];
+    expect(shareCall.title).to.equal('TITLE');
+    expect(shareCall.text).to.equal('this is a description');
+    expect(shareCall.dialogTitle).to.equal('Share a Leeds Digital Festival Talk');
+    expect(shareCall.url).to.include('/talk/1234567890');
   });
 
   it('should copy a link to talk if not available on the web', async () => {
@@ -57,5 +57,45 @@ describe('share-talk tests', () => {
     expect(clipboardSpy.firstCall.args[0]).to.include('/talk/1234567890');
     expect(snackbar.labelText).to.equal('Copied a link to the talk \'TITLE\'.');
     expect(snackbarSpy.callCount).to.equal(1);
+  });
+
+  it('should track the share', async () => {
+    const trackSpy = sinon.spy();
+    node.analytics = {
+      trackTalkEvent: trackSpy,
+    };
+    await node.updateComplete;
+
+    const button = node.shadowRoot.querySelector('mwc-icon-button');
+    button.click();
+    await node.updateComplete;
+
+    expect(trackSpy.callCount).to.equal(1);
+    expect(trackSpy.firstCall.args).to.deep.equal([
+      'share',
+      {
+        id: '1234567890',
+        title: 'TITLE',
+        description: 'this is a description',
+      },
+    ]);
+  });
+
+  it('should track exceptions when sharing', async () => {
+    const trackSpy = sinon.spy();
+    node.analytics = {
+      trackException: trackSpy,
+    };
+    await node.updateComplete;
+
+    const stub = sinon.stub(capacitor.Plugins.Share, 'share');
+    stub.throws();
+
+    const clipboardSpy = sinon.stub(window.navigator.clipboard, 'writeText');
+    clipboardSpy.rejects('BOOM');
+
+    await node.share();
+
+    expect(trackSpy.callCount).to.equal(1);
   });
 });

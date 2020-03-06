@@ -96,6 +96,7 @@
     "@material/mwc-icon-button-toggle": "^0.13.0",
     "@material/mwc-snackbar": "^0.13.0",
     "@material/mwc-top-app-bar": "^0.13.0",
+    "@microsoft/applicationinsights-web": "^2.4.4",
     "@webcomponents/webcomponentsjs": "^2.4.0",
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.2",

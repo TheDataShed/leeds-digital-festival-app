@@ -5,29 +5,8 @@ import { LDFApp } from './ldf-app';
 import * as storage from './elements/storage';
 
 describe('ldf-app constructor tests', () => {
-  let fetchStub;
-  beforeEach(async () => {
-    const expectedTalks = [
-      {
-        title: 'Talk',
-        date: '2020-02-11T20:18:20.026Z',
-        speaker: 'Roger',
-        description: 'blblbllblblblbl',
-      },
-    ];
-    fetchStub = sinon.stub(window, 'fetch');
-    const jsonStub = sinon.stub();
-    jsonStub.resolves(expectedTalks);
-
-    fetchStub.resolves({
-      ok: true,
-      json: jsonStub,
-    });
-  });
-
   afterEach(async () => {
     sinon.restore();
-    await storage.clearFavouriteTalks();
   });
 
   it('should call the routing service', async () => {
@@ -36,33 +15,15 @@ describe('ldf-app constructor tests', () => {
     expect(routingStub.callCount).to.equal(1);
   });
 
-  it('should call to load the talks', async () => {
-    const app = document.createElement('ldf-app');
-    document.body.appendChild(app);
-    await app.updateComplete;
-    expect(fetchStub.callCount).to.equal(1);
-    expect(fetchStub.firstCall.args[0]).to.equal('/talks.json');
-    await app.updateComplete;
-    expect(app.talks).to.deep.equal([
-      {
-        title: 'Talk',
-        date: '2020-02-11T20:18:20.026Z',
-        speaker: 'Roger',
-        description: 'blblbllblblblbl',
-      },
-    ]);
-    app.remove();
+  it('should call the load data', async () => {
+    const loadDataStub = sinon.stub(LDFApp.prototype, 'loadData');
+    new LDFApp();
+    expect(loadDataStub.callCount).to.equal(1);
   });
 
-  it('should call to load the favourite talks', async () => {
-    storage.saveFavouriteTalks(['1', '4']);
-
-    const app = document.createElement('ldf-app');
-    document.body.appendChild(app);
-    await app.updateComplete;
-    await app.updateComplete;
-    expect(app.favouriteTalks).to.deep.equal(['1', '4']);
-    app.remove();
+  it('should create the analytics service', async () => {
+    const app = new LDFApp();
+    expect(app.analytics.config.instrumentationKey).to.equal('');
   });
 });
 
@@ -142,7 +103,7 @@ describe('ldf-app tests', () => {
     expect(Array.from(sponsorLinks).map(link => link.hasAttribute('data-selected'))).to.deep.equal([true]);
   });
 
-  it('should load the talks', async () => {
+  it('should load the talk and favourites data', async () => {
     const expectedTalks = [
       {
         title: 'Talk',
@@ -159,27 +120,44 @@ describe('ldf-app tests', () => {
       ok: true,
       json: jsonStub,
     });
+    const expectedFavouritedTalks = ['1', '4'];
+    await storage.saveFavouriteTalks(expectedFavouritedTalks);
 
-    await node.loadTalks();
+    await node.loadData();
     expect(fetchStub.callCount).to.equal(1);
     expect(jsonStub.callCount).to.equal(1);
     expect(node.talks).to.deep.equal(expectedTalks);
     expect(node.isError).to.be.false;
     expect(node.isLoading).to.be.false;
     expect(fetchStub.firstCall.args[0]).to.equal('/talks.json');
+    expect(node.favouriteTalks).to.deep.equal(expectedFavouritedTalks);
   });
 
   it('should not explode if failing to load the talks and set isError state', async () => {
     const fetchStub = sinon.stub(window, 'fetch');
     fetchStub.rejects();
 
-    await node.loadTalks();
+    await node.loadData();
     expect(fetchStub.callCount).to.equal(1);
     expect(node.isError).to.be.true;
     expect(node.isLoading).to.be.false;
   });
 
-  it('should not load the talks if response isn\'t ok (200-299)', async () => {
+  it('should track exceptions when loading talks', async () => {
+    const trackSpy = sinon.spy();
+    node.analytics = {
+      trackException: trackSpy,
+    };
+    await node.updateComplete;
+
+    const fetchStub = sinon.stub(window, 'fetch');
+    fetchStub.rejects();
+
+    await node.loadData();
+    expect(trackSpy.callCount).to.equal(1);
+  });
+
+  it('should not load the talks and favourites if load talks response isn\'t ok (200-299)', async () => {
     const fetchStub = sinon.stub(window, 'fetch');
     const jsonStub = sinon.stub();
     jsonStub.resolves([
@@ -193,7 +171,7 @@ describe('ldf-app tests', () => {
       json: jsonStub,
     });
 
-    await node.loadTalks();
+    await node.loadData();
     expect(fetchStub.callCount).to.equal(1);
     expect(jsonStub.callCount).to.equal(0);
     expect(node.talks).to.deep.equal([]);
@@ -201,8 +179,8 @@ describe('ldf-app tests', () => {
     expect(node.isLoading).to.be.false;
   });
 
-  it('should set the loading property when loading the talks', () => {
-    node.loadTalks();
+  it('should set the loading property when loading the talks and favourites', () => {
+    node.loadData();
     expect(node.isLoading).to.be.true;
   });
 
@@ -305,5 +283,41 @@ describe('ldf-app tests', () => {
 
     const savedTalks = await storage.loadFavouriteTalks();
     expect(savedTalks).to.deep.equal(['20']);
+  });
+
+  it('should pass the analytics down to home, favourite and talk pages', async () => {
+    node.analytics = {
+      a: 'test',
+    };
+    await node.updateComplete;
+    const home = node.shadowRoot.querySelector('home-page');
+    const talk = node.shadowRoot.querySelector('talk-page');
+    const favourites = node.shadowRoot.querySelector('favourite-talks-page');
+
+    expect(home.analytics).to.deep.equal({
+      a: 'test',
+    });
+    expect(talk.analytics).to.deep.equal({
+      a: 'test',
+    });
+    expect(favourites.analytics).to.deep.equal({
+      a: 'test',
+    });
+  });
+
+  it('should track page views', async () => {
+    const trackSpy = sinon.spy();
+    node.analytics = {
+      trackPageView: trackSpy,
+    };
+    await node.updateComplete;
+
+    node.routeData = {
+      path: '/blah',
+    };
+    await node.updateComplete;
+
+    expect(trackSpy.callCount).to.equal(1);
+    expect(trackSpy.firstCall.args[0]).to.equal('/blah');
   });
 });

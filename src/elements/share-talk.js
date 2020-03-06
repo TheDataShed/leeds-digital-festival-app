@@ -55,6 +55,8 @@ export class ShareTalk extends LitElement {
     return {
       /** The talk information */
       talk: { type: Object },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -62,6 +64,7 @@ export class ShareTalk extends LitElement {
   constructor() {
     super();
     this.talk = {};
+    this.analytics = {};
   }
 
   /**
@@ -76,16 +79,26 @@ export class ShareTalk extends LitElement {
      * When share is clicked
      */
   async share() {
+    const talkUrl = `${window.location.origin}/talk/${this.talk.id}`;
+    if (this.analytics && this.analytics.trackTalkEvent) {
+      this.analytics.trackTalkEvent('share', this.talk);
+    }
     try {
       await Share.share({
         title: this.talk.title,
         text: this.talk.description,
-        url: `http://localhost:8001/talk/${this.talk.id}`,
+        url: talkUrl,
         dialogTitle: 'Share a Leeds Digital Festival Talk',
       });
     } catch (e) {
-      await navigator.clipboard.writeText(`http://localhost:8001/talk/${this.talk.id}`);
-      this.snackbar.open();
+      try {
+        await navigator.clipboard.writeText(talkUrl);
+        this.snackbar.open();
+      } catch (err) {
+        if (this.analytics && this.analytics.trackException) {
+          this.analytics.trackException(err);
+        }
+      }
     }
   }
 }

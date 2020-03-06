@@ -81,9 +81,9 @@ export class TalkOverview extends LitElement {
               <a class="more" href="/talk/${this.talk.id}">View Talk</a>
             </div>
             <div class="footer">
-                <favourite-talk ?isFavourited=${this.isFavourited} .talk=${this.talk}></favourite-talk>
-                <directions-talk .talk=${this.talk}></directions-talk>
-                <share-talk .talk=${this.talk}></share-talk>
+              <favourite-talk ?isFavourited=${this.isFavourited} .talk=${this.talk} .analytics=${this.analytics}>Favourite Talk</favourite-talk>
+              <directions-talk .talk=${this.talk} .analytics=${this.analytics}></directions-talk>
+              <share-talk .talk=${this.talk} .analytics=${this.analytics}></share-talk>
             </div>
     `;
   }
@@ -95,6 +95,8 @@ export class TalkOverview extends LitElement {
       talk: { type: Object },
       /** If the talk is a favourite */
       isFavourited: { type: Boolean },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -103,6 +105,7 @@ export class TalkOverview extends LitElement {
     super();
     this.talk = {};
     this.isFavourited = false;
+    this.analytics = {};
   }
 }
 
