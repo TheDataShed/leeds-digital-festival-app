@@ -67,4 +67,19 @@ describe('home-page tests', () => {
     const expectedFalse = node.isTalkFavourited({ id: '2' });
     expect(expectedFalse).to.be.false;
   });
+
+  it('should pass the analytics down to talk overview', async () => {
+    node.analytics = {
+      a: 'test',
+    };
+    node.talks = [
+      { id: '1' },
+    ];
+    await node.updateComplete;
+    const talk = node.shadowRoot.querySelector('talk-overview');
+
+    expect(talk.analytics).to.deep.equal({
+      a: 'test',
+    });
+  });
 });

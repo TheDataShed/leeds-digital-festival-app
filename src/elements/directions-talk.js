@@ -31,7 +31,7 @@ export class DirectionsTalk extends LitElement {
    */
   render() {
     return html`
-      <a href="${this.directionsLink}" target="_blank" rel="noreferrer">
+      <a href="${this.directionsLink}" target="_blank" rel="noreferrer" @click=${this.track}>
         <mwc-icon-button icon="place"></mwc-icon-button>
       </a>
     `;
@@ -42,6 +42,8 @@ export class DirectionsTalk extends LitElement {
     return {
       /** The talk information */
       talk: { type: Object },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -49,6 +51,7 @@ export class DirectionsTalk extends LitElement {
   constructor() {
     super();
     this.talk = {};
+    this.analytics = {};
   }
 
   /**
@@ -58,6 +61,15 @@ export class DirectionsTalk extends LitElement {
      */
   get directionsLink() {
     return `http://maps.apple.com/?daddr=${this.talk.address || 'Leeds'}`;
+  }
+
+  /**
+   * Track direction clicks
+   */
+  track() {
+    if (this.analytics && this.analytics.trackTalkEvent) {
+      this.analytics.trackTalkEvent('directions', this.talk);
+    }
   }
 }
 

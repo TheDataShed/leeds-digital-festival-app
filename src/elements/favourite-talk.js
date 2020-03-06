@@ -47,6 +47,8 @@ export class FavouriteTalk extends LitElement {
       talk: { type: Object },
       /** If the talk is a favourite */
       isFavourited: { type: Boolean },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -55,6 +57,7 @@ export class FavouriteTalk extends LitElement {
     super();
     this.talk = {};
     this.isFavourited = false;
+    this.analytics = {};
   }
 
   /**
@@ -62,12 +65,16 @@ export class FavouriteTalk extends LitElement {
      * @param {CustomEvent} event
      */
   toggle(event) {
-    const eventName = (event.detail.isOn ? 'talk-favourited' : 'talk-unfavourited');
-    this.dispatchEvent(new CustomEvent(eventName, {
+    const eventName = (event.detail.isOn ? 'favourited' : 'unfavourited');
+    this.dispatchEvent(new CustomEvent(`talk-${eventName}`, {
       detail: this.talk.id,
       bubbles: true,
       composed: true,
     }));
+
+    if (this.analytics && this.analytics.trackTalkEvent) {
+      this.analytics.trackTalkEvent(eventName, this.talk);
+    }
   }
 }
 

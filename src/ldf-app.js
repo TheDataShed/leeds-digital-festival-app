@@ -7,9 +7,8 @@ import { LitElement, html, css } from 'lit-element/lit-element';
 // eslint-disable-next-line no-unused-vars
 import { Capacitor } from '@capacitor/core';
 import { sharedStyles } from './shared-styles';
-import {
-  parseQueryParams, validatePage, importPage, trackPageChanges,
-} from './elements/router';
+import { Analytics } from './elements/analytics';
+import { parseQueryParams, validatePage, importPage } from './elements/router';
 import { loadFavouriteTalks, saveFavouriteTalks } from './elements/storage';
 /**
  * `ldf-app`
@@ -171,9 +170,9 @@ export class LDFApp extends LitElement {
         </mwc-top-app-bar>
         <div class="main-content">
           <div class="pages" role="main">
-            <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></home-page>
-            <favourite-talks-page name="favourites" ?hidden=${this.page !== 'favourites'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></favourite-talks-page>
-            <talk-page name="talk" ?hidden=${this.page !== 'talk'} .routeData=${this.routeData} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError}></talk-page>
+            <home-page name="home" ?hidden=${this.page !== 'home'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError} .analytics=${this.analytics}></home-page>
+            <favourite-talks-page name="favourites" ?hidden=${this.page !== 'favourites'} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError} .analytics=${this.analytics}></favourite-talks-page>
+            <talk-page name="talk" ?hidden=${this.page !== 'talk'} .routeData=${this.routeData} .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} ?isLoading=${this.isLoading} ?isError=${this.isError} .analytics=${this.analytics}></talk-page>
             <privacy-page name="privacy" ?hidden=${this.page !== 'privacy'}></privacy-page>
             <terms-page name="terms" ?hidden=${this.page !== 'terms'}></terms-page>
             <sponsors-page name="sponsors" ?hidden=${this.page !== 'sponsors'}></sponsors-page>
@@ -213,6 +212,8 @@ export class LDFApp extends LitElement {
       isLoading: { type: Boolean },
       /** If the list of talks has errored */
       isError: { type: Boolean },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -230,6 +231,9 @@ export class LDFApp extends LitElement {
     this.isError = false;
     this.talks = [];
     this.favouriteTalks = [];
+    this.analytics = new Analytics('');
+    this.analytics.loadAppInsights();
+    this.loadData();
   }
 
   /** Add any event listeners */
@@ -237,19 +241,13 @@ export class LDFApp extends LitElement {
     if (super.connectedCallback) {
       super.connectedCallback();
     }
-    if (!window.fetch) {
-      await import('whatwg-fetch');
-    }
-    this.loadTalks();
+
+    this.addEventListener('talk-favourited', this.addFavouritedTalk);
+    this.addEventListener('talk-unfavourited', this.removeFavouritedTalk);
 
     const isMobileQuery = window.matchMedia('(max-width: 769px)');
     this.isMobile = isMobileQuery.matches;
     isMobileQuery.addListener(({ matches }) => { this.isMobile = matches; });
-
-    this.favouriteTalks = await loadFavouriteTalks();
-
-    this.addEventListener('talk-favourited', this.addFavouritedTalk);
-    this.addEventListener('talk-unfavourited', this.removeFavouritedTalk);
   }
 
   /** Remove any event listeners */
@@ -274,13 +272,17 @@ export class LDFApp extends LitElement {
       if (this.routeData && this.routeData.params) {
         this.routePageChanged(this.routeData.params.page);
       }
-      trackPageChanges(this.routeData.path);
+      this.analytics.trackPageView(this.routeData.path);
     }
     if (changedProperties.has('page')) {
       importPage(this.page);
     }
     if (changedProperties.has('favouriteTalks') && this.favouriteTalks) {
-      saveFavouriteTalks(this.favouriteTalks);
+      try {
+        saveFavouriteTalks(this.favouriteTalks);
+      } catch (err) {
+        this.analytics.trackException(err);
+      }
     }
   }
 
@@ -338,22 +340,33 @@ export class LDFApp extends LitElement {
   }
 
   /**
-   * Load the talks list from blob
+   * Load all the data and polyfill if required
    */
-  async loadTalks() {
+  async loadData() {
+    this.isLoading = true;
     try {
-      this.isLoading = true;
-      const response = await fetch('/talks.json');
-      if (response.ok) {
-        this.talks = await response.json();
-      } else {
-        this.isError = true;
+      if (!window.fetch) {
+        await import('whatwg-fetch');
       }
-    } catch (e) {
+      this.talks = await LDFApp.loadTalks();
+      this.favouriteTalks = await loadFavouriteTalks();
+    } catch (err) {
       this.isError = true;
-      // send error to app insights
+      this.analytics.trackException(err);
     }
     this.isLoading = false;
+  }
+
+  /**
+   * Load the talks list from blob
+   * @return {Promise} the promised response
+   */
+  static async loadTalks() {
+    const response = await fetch('/talks.json');
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
   }
 
   /**

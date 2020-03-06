@@ -57,7 +57,7 @@ export class FavouriteTalksPage extends LitElement {
       <div class="list">
         ${this.talks
     .filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)
-    .map(talk => html`<talk-overview .talk=${talk} isFavourited></talk-overview>`)}
+    .map(talk => html`<talk-overview .talk=${talk} isFavourited .analytics=${this.analytics}></talk-overview>`)}
       </div>
     `;
   }
@@ -73,6 +73,8 @@ export class FavouriteTalksPage extends LitElement {
       isLoading: { type: Boolean },
       /** If the list of talks has errored */
       isError: { type: Boolean },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -83,6 +85,7 @@ export class FavouriteTalksPage extends LitElement {
     this.isError = false;
     this.talks = [];
     this.favouriteTalks = [];
+    this.analytics = {};
   }
 }
 

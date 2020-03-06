@@ -50,4 +50,20 @@ describe('favourite-talks-page tests', () => {
     expect(node.isError).to.be.true;
     expect(error.hidden).to.be.false;
   });
+
+  it('should pass the analytics down to talk overview', async () => {
+    node.analytics = {
+      a: 'test',
+    };
+    node.talks = [
+      { id: '1' },
+    ];
+    node.favouriteTalks = ['1'];
+    await node.updateComplete;
+    const talk = node.shadowRoot.querySelector('talk-overview');
+
+    expect(talk.analytics).to.deep.equal({
+      a: 'test',
+    });
+  });
 });

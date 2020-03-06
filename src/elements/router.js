@@ -70,11 +70,3 @@ export const importPage = (page) => {
       import('../pages/lost-page');
   }
 };
-
-/**
- * Track page changes in app insights
- * @param {String} path the full url path
- */
-export const trackPageChanges = () => {
-
-};

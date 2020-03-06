@@ -81,9 +81,9 @@ export class TalkPage extends LitElement {
           <p>${this.talk.description}</p>
         </section>
         <section class="footer">
-          <favourite-talk ?isFavourited=${this.isFavourited} .talk=${this.talk}>Favourite Talk</favourite-talk>
-          <directions-talk .talk=${this.talk}></directions-talk>
-          <share-talk .talk=${this.talk}></share-talk>
+          <favourite-talk ?isFavourited=${this.isFavourited} .talk=${this.talk} .analytics=${this.analytics}>Favourite Talk</favourite-talk>
+          <directions-talk .talk=${this.talk} .analytics=${this.analytics}></directions-talk>
+          <share-talk .talk=${this.talk} .analytics=${this.analytics}></share-talk>
         </section>
     `;
   }
@@ -103,6 +103,8 @@ export class TalkPage extends LitElement {
       isError: { type: Boolean },
       /** The talk information */
       talk: { type: Object },
+      /** Analytics class */
+      analytics: { type: Object },
     };
   }
 
@@ -115,6 +117,7 @@ export class TalkPage extends LitElement {
     this.talks = [];
     this.favouriteTalks = [];
     this.talk = {};
+    this.analytics = {};
   }
 
 

@@ -68,4 +68,32 @@ describe('favourite-talk tests', () => {
     expect(spy.firstCall.args[0].detail).to.equal('1234567890');
     expect(toggle.on).to.be.false;
   });
+
+  it('should track the favourite and unfavourite', async () => {
+    const trackSpy = sinon.spy();
+    node.analytics = {
+      trackTalkEvent: trackSpy,
+    };
+    await node.updateComplete;
+
+    const toggle = node.shadowRoot.querySelector('mwc-icon-button-toggle');
+    const button = toggle.shadowRoot.querySelector('button');
+    button.click();
+    button.click();
+    await node.updateComplete;
+
+    expect(trackSpy.callCount).to.equal(2);
+    expect(trackSpy.firstCall.args).to.deep.equal([
+      'favourited',
+      {
+        id: '1234567890',
+      },
+    ]);
+    expect(trackSpy.secondCall.args).to.deep.equal([
+      'unfavourited',
+      {
+        id: '1234567890',
+      },
+    ]);
+  });
 });

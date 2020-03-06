@@ -88,4 +88,24 @@ describe('talk-overview tests', () => {
     const link = node.shadowRoot.querySelector('a');
     expect(link.href).to.include('/talk/1234567890');
   });
+
+  it('should pass the analytics down to favourite, directions and share', async () => {
+    node.analytics = {
+      a: 'test',
+    };
+    await node.updateComplete;
+    const favourite = node.shadowRoot.querySelector('favourite-talk');
+    const directions = node.shadowRoot.querySelector('directions-talk');
+    const share = node.shadowRoot.querySelector('share-talk');
+
+    expect(favourite.analytics).to.deep.equal({
+      a: 'test',
+    });
+    expect(directions.analytics).to.deep.equal({
+      a: 'test',
+    });
+    expect(share.analytics).to.deep.equal({
+      a: 'test',
+    });
+  });
 });
