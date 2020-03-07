@@ -36,6 +36,10 @@ export class FavouriteTalksPage extends LitElement {
         .list {
           padding: 2em;
         }
+
+        .list[active] {
+          background-color: var(--pink-color);
+        }
       }
       `;
 
@@ -54,7 +58,7 @@ export class FavouriteTalksPage extends LitElement {
       </section>
       <loading-display ?hidden=${!this.isLoading}></loading-display>
       <error-display ?hidden=${!this.isError}></error-display>
-      <div class="list">
+      <div class="list" ?active=${this.talks.filter(talk => this.favouriteTalks.indexOf(talk.id) > -1).length > 0}>
         ${this.talks
     .filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)
     .map(talk => html`<talk-overview .talk=${talk} isFavourited .analytics=${this.analytics}></talk-overview>`)}
