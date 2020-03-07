@@ -20,6 +20,10 @@ export class FavouriteTalk extends LitElement {
             --mdc-icon-size: var(--icon-size, 24px);
             --mdc-icon-button-size: var(--button-size, 48px);
         }
+
+        mwc-icon-button-toggle[on] {
+          color: var(--pink-color);
+        }
       `;
 
     return [sharedStyles, style];

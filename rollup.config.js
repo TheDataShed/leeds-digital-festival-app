@@ -25,7 +25,8 @@ const copyPlugin = copy([
   { files: 'node_modules/@babel/polyfill/dist/polyfill.min.js', dest: 'build/node_modules/@babel/polyfill/dist' },
   { files: 'node_modules/systemjs/dist/s.min.js', dest: 'build/legacy' },
   { files: 'images/**/*', dest: 'build/images' },
-  { files: 'assets/**', dest: 'build' },
+  { files: 'assets/**/*', dest: 'build' },
+  { files: 'assets/.well-known/*', dest: 'build/.well-known' },
 ]);
 
 export default [

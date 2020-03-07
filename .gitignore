@@ -1,4 +1,6 @@
 build/
 node_modules/
+android/app/release/*
+talks.json
 tests/*
 !tests/exclude-dupe-elements.js

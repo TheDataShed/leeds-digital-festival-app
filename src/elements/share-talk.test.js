@@ -11,6 +11,7 @@ describe('share-talk tests', () => {
       id: '1234567890',
       title: 'TITLE',
       description: 'this is a description',
+      speaker: 'talker',
     };
     document.body.appendChild(node);
     await node.updateComplete;
@@ -36,7 +37,7 @@ describe('share-talk tests', () => {
 
     const shareCall = spy.firstCall.args[0];
     expect(shareCall.title).to.equal('TITLE');
-    expect(shareCall.text).to.equal('this is a description');
+    expect(shareCall.text).to.equal('TITLE by talker');
     expect(shareCall.dialogTitle).to.equal('Share a Leeds Digital Festival Talk');
     expect(shareCall.url).to.include('/talk/1234567890');
   });
@@ -77,6 +78,7 @@ describe('share-talk tests', () => {
         id: '1234567890',
         title: 'TITLE',
         description: 'this is a description',
+        speaker: 'talker',
       },
     ]);
   });

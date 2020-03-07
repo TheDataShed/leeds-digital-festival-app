@@ -86,7 +86,7 @@ export class ShareTalk extends LitElement {
     try {
       await Share.share({
         title: this.talk.title,
-        text: this.talk.description,
+        text: `${this.talk.title} by ${this.talk.speaker}`,
         url: talkUrl,
         dialogTitle: 'Share a Leeds Digital Festival Talk',
       });
