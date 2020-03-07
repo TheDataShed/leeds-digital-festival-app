@@ -33,6 +33,19 @@ describe('home-page tests', () => {
     expect(talks.length).to.equal(4);
   });
 
+  it('should set active property on list if talks to render', async () => {
+    node.talks = [
+      { id: '1' },
+      { id: '2' },
+      { id: '3' },
+      { id: '4' },
+    ];
+    await node.updateComplete;
+
+    const list = node.shadowRoot.querySelector('.list');
+    expect(list.getAttribute('active')).to.not.be.null;
+  });
+
   it('should render the loading display when isLoading', async () => {
     const loading = node.shadowRoot.querySelector('loading-display');
     expect(node.isLoading).to.be.false;

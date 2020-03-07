@@ -37,9 +37,12 @@ export class HomePage extends LitElement {
           color: var(--pink-color);
         }
 
-        .talks {
-          background-color: var(--pink-color);
+        .list {
           padding: 2em;
+        }
+
+        .list[active] {
+          background-color: var(--pink-color);
         }
       }
       `;
@@ -62,7 +65,7 @@ export class HomePage extends LitElement {
       <section class="talks">
         <loading-display ?hidden=${!this.isLoading}></loading-display>
         <error-display ?hidden=${!this.isError}></error-display>
-        <div class="list">
+        <div class="list" ?active=${this.talks.length > 0}>
           ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)} .analytics=${this.analytics}></talk-overview>`)}
         </div>
       </section>
