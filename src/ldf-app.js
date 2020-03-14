@@ -5,11 +5,13 @@ import '@material/mwc-top-app-bar';
 import router from 'page/page.mjs';
 import { LitElement, html, css } from 'lit-element/lit-element';
 // eslint-disable-next-line no-unused-vars
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, Plugins } from '@capacitor/core';
 import { sharedStyles } from './shared-styles';
 import { Analytics } from './elements/analytics';
 import { parseQueryParams, validatePage, importPage } from './elements/router';
 import { loadFavouriteTalks, saveFavouriteTalks } from './elements/storage';
+
+const { SplashScreen } = Plugins;
 /**
  * `ldf-app`
  * The app shell to do all the routing and what not
@@ -158,7 +160,7 @@ export class LDFApp extends LitElement {
         </nav>
       </div>
       <div slot="appContent">
-        <mwc-top-app-bar @MDCTopAppBar:nav=${this.toggleDrawer} ?centerTitle=${this.isMobile}>
+        <mwc-top-app-bar @MDCTopAppBar:nav=${this.toggleDrawer} ?centerTitle=${this.isMobile} .scrollTarget=${document.body}>
           <mwc-icon-button class="menu" slot="navigationIcon" icon="menu" label="Menu Button"></mwc-icon-button>
           <div slot="title">
             <a class="logo" href="/home">
@@ -231,6 +233,7 @@ export class LDFApp extends LitElement {
     this.isError = false;
     this.talks = [];
     this.favouriteTalks = [];
+    SplashScreen.hide();
     this.analytics = new Analytics('');
     this.analytics.loadAppInsights();
     this.loadData();
@@ -276,13 +279,6 @@ export class LDFApp extends LitElement {
     }
     if (changedProperties.has('page')) {
       importPage(this.page);
-    }
-    if (changedProperties.has('favouriteTalks') && this.favouriteTalks) {
-      try {
-        saveFavouriteTalks(this.favouriteTalks);
-      } catch (err) {
-        this.analytics.trackException(err);
-      }
     }
   }
 
@@ -362,7 +358,8 @@ export class LDFApp extends LitElement {
    * @return {Promise} the promised response
    */
   static async loadTalks() {
-    const response = await fetch('/talks.json');
+    const request = new Request('https://ldf.azureedge.net/talks.json', { mode: 'cors' });
+    const response = await fetch(request);
     if (response.ok) {
       return response.json();
     }
@@ -378,6 +375,7 @@ export class LDFApp extends LitElement {
       const existing = JSON.parse(JSON.stringify(this.favouriteTalks));
       existing.push(event.detail);
       this.favouriteTalks = existing;
+      this.updateFavouriteTalks(existing);
     }
   }
 
@@ -391,6 +389,19 @@ export class LDFApp extends LitElement {
       const existing = JSON.parse(JSON.stringify(this.favouriteTalks));
       existing.splice(find, 1);
       this.favouriteTalks = existing;
+      this.updateFavouriteTalks(existing);
+    }
+  }
+
+  /**
+   * Save favourite talks method wrapper
+   * @param {Array} favouriteTalks list of fav talks
+   */
+  async updateFavouriteTalks(favouriteTalks) {
+    try {
+      saveFavouriteTalks(favouriteTalks);
+    } catch (err) {
+      this.analytics.trackException(err);
     }
   }
 }

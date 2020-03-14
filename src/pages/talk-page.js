@@ -40,6 +40,10 @@ export class TalkPage extends LitElement {
           padding: 1em 2em;
         }
 
+        .content>p {
+          word-break: break-word;
+        }
+
         .footer {
           text-align: center;
           display: flex;

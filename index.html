@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="Leeds Digital Festival App">
-  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no, viewport-fit=cover">
 
   <title>Leeds Digital Festival App</title>
   <meta name="description" content="Leeds Digital Festival App">
@@ -16,7 +16,7 @@
   <meta name="twitter:description" content="The Leeds Digital Festival is an open platform event, which means any individual or company can take part.">
   <meta name="twitter:image" content="/images/manifest/icon-192x192.png">
 
-  <meta property="og:url" content="https://ldf.z33.web.core.windows.net/">
+  <meta property="og:url" content="https://ldf.azureedge.net/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Leeds Digital Festival App">
   <meta property="og:description" content="The Leeds Digital Festival is an open platform event, which means any individual or company can take part.">
@@ -65,7 +65,7 @@
   </script>
 
   <!-- Load babel polyfills -->
-  <script src="/node_modules/@babel/polyfill/dist/polyfill.min.js"></script>
+  <script nomodule src="/node_modules/@babel/polyfill/dist/polyfill.min.js"></script>
 
   <!-- Load Custom Elements es5 adapter -->
   <script nomodule src="/node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
@@ -74,7 +74,7 @@
   <script nomodule src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
   <!-- Add any fonts here (recommend async loading) -->
-  <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <!-- Load system modules for IE11 -->
   <script nomodule src="/legacy/s.min.js"></script>
@@ -83,10 +83,12 @@
   <style>
     @font-face {
         font-family: "ahamono";
+        font-display: swap;
         src: url('/assets/fonts/AHAMONO-Regular.woff2');
     }
     @font-face {
         font-family: "worksans";
+        font-display: swap;
         src: url('/assets/fonts/worksans.woff2');
     }
 

@@ -39,6 +39,7 @@ export class TalkOverview extends LitElement {
         .content>p {
           margin-left: auto;
           margin-right: auto;
+          word-break: break-word;
         }
 
         .content>.more {

@@ -45,6 +45,7 @@ export class SponsorsPage extends LitElement {
           list-style-type: none;
           display: flex;
           flex-wrap: wrap;
+          padding: 0;
         }
 
         li.sponsor {

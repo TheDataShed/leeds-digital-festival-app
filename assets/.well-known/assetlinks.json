@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.leedsdigitalfestival.app",
+            "sha256_cert_fingerprints": [
+                "12:44:04:BA:54:10:CB:0B:D7:8C:45:57:82:A4:DE:4C:AE:DC:E5:A6:00:80:56:D4:C2:72:32:1E:24:88:3D:4F"
+            ]
+        }
+    }
+]

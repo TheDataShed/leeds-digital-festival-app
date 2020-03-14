@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import { expect } from 'chai';
 import sinon from 'sinon';
+import * as capacitor from '@capacitor/core';
 import { LDFApp } from './ldf-app';
 import * as storage from './elements/storage';
 
@@ -24,6 +25,12 @@ describe('ldf-app constructor tests', () => {
   it('should create the analytics service', async () => {
     const app = new LDFApp();
     expect(app.analytics.config.instrumentationKey).to.equal('');
+  });
+
+  it('should call to hide the splash screen', async () => {
+    const spy = sinon.stub(capacitor.Plugins.SplashScreen, 'hide');
+    new LDFApp();
+    expect(spy.callCount).to.equal(1);
   });
 });
 
@@ -124,16 +131,23 @@ describe('ldf-app tests', () => {
     await storage.saveFavouriteTalks(expectedFavouritedTalks);
 
     await node.loadData();
+    const request = fetchStub.firstCall.args[0];
     expect(fetchStub.callCount).to.equal(1);
     expect(jsonStub.callCount).to.equal(1);
     expect(node.talks).to.deep.equal(expectedTalks);
     expect(node.isError).to.be.false;
     expect(node.isLoading).to.be.false;
-    expect(fetchStub.firstCall.args[0]).to.equal('/talks.json');
+
+    expect(request.url).to.equal('https://ldf.azureedge.net/talks.json');
+    expect(request.mode).to.equal('cors');
     expect(node.favouriteTalks).to.deep.equal(expectedFavouritedTalks);
   });
 
   it('should not explode if failing to load the talks and set isError state', async () => {
+    node.analytics = {
+      trackException: () => {},
+    };
+    await node.updateComplete;
     const fetchStub = sinon.stub(window, 'fetch');
     fetchStub.rejects();
 
@@ -144,7 +158,7 @@ describe('ldf-app tests', () => {
   });
 
   it('should track exceptions when loading talks', async () => {
-    const trackSpy = sinon.spy();
+    const trackSpy = sinon.stub();
     node.analytics = {
       trackException: trackSpy,
     };
@@ -158,6 +172,10 @@ describe('ldf-app tests', () => {
   });
 
   it('should not load the talks and favourites if load talks response isn\'t ok (200-299)', async () => {
+    node.analytics = {
+      trackException: () => {},
+    };
+    await node.updateComplete;
     const fetchStub = sinon.stub(window, 'fetch');
     const jsonStub = sinon.stub();
     jsonStub.resolves([
@@ -274,15 +292,34 @@ describe('ldf-app tests', () => {
     expect(node.favouriteTalks).to.deep.equal([]);
   });
 
-  it('should call to save the favourite talks on change', async () => {
+  it('should call to save the favourite talks when talk-favourited', async () => {
     const existingTalks = await storage.loadFavouriteTalks();
     expect(existingTalks).to.deep.equal([]);
 
-    node.favouriteTalks = ['20'];
+    node.dispatchEvent(new CustomEvent('talk-favourited', {
+      detail: '20',
+      bubbles: true,
+      composed: true,
+    }));
     await node.updateComplete;
 
     const savedTalks = await storage.loadFavouriteTalks();
     expect(savedTalks).to.deep.equal(['20']);
+  });
+
+  it('should call to save the favourite talks when talk-unfavourited', async () => {
+    node.favouriteTalks = ['1', '20', '3'];
+    await node.updateComplete;
+
+    node.dispatchEvent(new CustomEvent('talk-unfavourited', {
+      detail: '20',
+      bubbles: true,
+      composed: true,
+    }));
+    await node.updateComplete;
+
+    const savedTalks = await storage.loadFavouriteTalks();
+    expect(savedTalks).to.deep.equal(['1', '3']);
   });
 
   it('should pass the analytics down to home, favourite and talk pages', async () => {
@@ -306,7 +343,7 @@ describe('ldf-app tests', () => {
   });
 
   it('should track page views', async () => {
-    const trackSpy = sinon.spy();
+    const trackSpy = sinon.stub();
     node.analytics = {
       trackPageView: trackSpy,
     };

@@ -1,1 +1,8 @@
-{}
+{
+  "appId": "com.leedsdigitalfestival.app",
+  "appName": "Leeds Digital Festival App",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {}
+}

@@ -1,7 +1,9 @@
 module.exports = {
   globDirectory: 'build/',
   globPatterns: [
-    '**/*.{jpg,svg,png,ico,html,js}',
+    '**/*.{ico,html,js}',
   ],
   swDest: 'build/service-worker.js',
+  cleanupOutdatedCaches: true,
+  inlineWorkboxRuntime: true,
 };

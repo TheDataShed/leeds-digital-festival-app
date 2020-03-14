@@ -2,8 +2,8 @@ const fs = require('fs');
 const { minify } = require('html-minifier');
 
 const html = fs.readFileSync('./index.html');
-
-const result = minify(html.toString().replace(/\/assets/ig, ''), {
+const content = html.toString().replace(/\/assets/ig, '');
+const result = minify(content, {
   collapseWhitespace: true,
   removeComments: true,
   minifyJS: true,
