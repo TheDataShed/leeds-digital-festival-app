@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
-import { formatDate } from './formatters';
+import { formatDateTime } from './formatters';
 import './favourite-talk';
 import './directions-talk';
 import './share-talk';
@@ -75,7 +75,7 @@ export class TalkOverview extends LitElement {
                 <div class="talk">
                     <h2 class="title">${this.talk.title}</h2>
                 </div>
-                <p class="date">${formatDate(this.talk.date)}</p>
+                <p class="date">${formatDateTime(this.talk.date)}</p>
             </div>
             <div class="content">
               <p>${(this.talk.description.length > 500 ? `${this.talk.description.substr(0, 500)}...` : this.talk.description)}</p>

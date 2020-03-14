@@ -4,13 +4,31 @@
  *
  */
 
-const dateFormatOption = {
+const dateTimeFormatOption = {
   month: 'long',
   day: 'numeric',
   hour: 'numeric',
   minute: 'numeric',
   weekday: 'long',
   hour12: true,
+};
+/**
+ * Formats dates and times in the local format
+ *
+ * @param {String} dateTime dateTime to format
+ * @return {String} Returns the formatted date time string
+ */
+export const formatDateTime = (dateTime) => {
+  if (dateTime) {
+    return new Intl.DateTimeFormat('default', dateTimeFormatOption).format(new Date(dateTime));
+  }
+  return dateTime;
+};
+
+const dateFormatOption = {
+  month: 'long',
+  day: 'numeric',
+  weekday: 'long',
 };
 /**
  * Formats dates in the local format

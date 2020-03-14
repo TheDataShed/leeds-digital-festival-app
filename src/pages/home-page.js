@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
 import '../elements/error-display';
 import '../elements/loading-display';
-import '../elements/talk-overview';
+import '../elements/talks-list';
 
 /**
  * `home-page`
@@ -66,7 +66,7 @@ export class HomePage extends LitElement {
         <loading-display ?hidden=${!this.isLoading}></loading-display>
         <error-display ?hidden=${!this.isError}></error-display>
         <div class="list" ?active=${this.talks.length > 0}>
-          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)} .analytics=${this.analytics}></talk-overview>`)}
+          <talks-list .talks=${this.talks} .favouriteTalks=${this.favouriteTalks} .analytics=${this.analytics}></talks-list>
         </div>
       </section>
     `;
@@ -98,14 +98,6 @@ export class HomePage extends LitElement {
     this.analytics = {};
   }
 
-  /**
-   * Checks the list of favourited talk ids to see if a talk is favoured
-   * @param {Object} talk the talk info
-   * @return {Boolean} if the talk is in the favourite list
-   */
-  isTalkFavourited(talk) {
-    return this.favouriteTalks.indexOf(talk.id) > -1;
-  }
 }
 
 window.customElements.define('home-page', HomePage);

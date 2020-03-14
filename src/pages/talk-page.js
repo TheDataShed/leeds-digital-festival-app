@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
-import { formatDate } from '../elements/formatters';
+import { formatDateTime } from '../elements/formatters';
 import '../elements/error-display';
 import '../elements/loading-display';
 import '../elements/favourite-talk';
@@ -77,7 +77,7 @@ export class TalkPage extends LitElement {
         <loading-display ?hidden=${!this.isLoading}></loading-display>
         <error-display ?hidden=${!this.isError}></error-display>
         <section class="header">
-          <h3 class="date">${formatDate(this.talk.date)}</h3>
+          <h3 class="date">${formatDateTime(this.talk.date)}</h3>
           <h1>${this.talk.title}</h1>
         </section>
         <section class="content">

@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element/lit-element';
 import { sharedStyles } from '../shared-styles';
 import '../elements/error-display';
 import '../elements/loading-display';
-import '../elements/talk-overview';
+import '../elements/talks-list';
 
 /**
  * `favourite-talks-page`
@@ -59,9 +59,7 @@ export class FavouriteTalksPage extends LitElement {
       <loading-display ?hidden=${!this.isLoading}></loading-display>
       <error-display ?hidden=${!this.isError}></error-display>
       <div class="list" ?active=${this.talks.filter(talk => this.favouriteTalks.indexOf(talk.id) > -1).length > 0}>
-        ${this.talks
-    .filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)
-    .map(talk => html`<talk-overview .talk=${talk} isFavourited .analytics=${this.analytics}></talk-overview>`)}
+        <talks-list .talks=${this.talks.filter(talk => this.favouriteTalks.indexOf(talk.id) > -1)} .favouriteTalks=${this.favouriteTalks} .analytics=${this.analytics}></talks-list>
       </div>
     `;
   }
