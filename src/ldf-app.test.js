@@ -350,11 +350,13 @@ describe('ldf-app tests', () => {
     await node.updateComplete;
 
     node.routeData = {
-      path: '/blah',
+      params: {
+        page: 'blah',
+      },
     };
     await node.updateComplete;
 
     expect(trackSpy.callCount).to.equal(1);
-    expect(trackSpy.firstCall.args[0]).to.equal('/blah');
+    expect(trackSpy.firstCall.args[0]).to.deep.equal({ name: 'blah' });
   });
 });

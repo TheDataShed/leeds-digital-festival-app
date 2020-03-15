@@ -277,7 +277,7 @@ export class LDFApp extends LitElement {
       if (this.routeData && this.routeData.params) {
         this.routePageChanged(this.routeData.params.page);
       }
-      this.analytics.trackPageView(this.routeData.path);
+      this.analytics.trackPageView({ name: this.routeData.params.page });
     }
     if (changedProperties.has('page')) {
       importPage(this.page);
