@@ -93,6 +93,8 @@ export class LDFApp extends LitElement {
             display: flex;
             position: fixed;
             bottom: 0;
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
             width: 100%;
             background: var(--white-color);
             border-top: 1px solid #f5f5f5;

@@ -3,8 +3,8 @@
   "short_name": "Leeds Digital Festival App",
   "start_url": "/home",
   "display": "standalone",
-  "theme_color": "#FFCD38",
-  "background_color": "#FFCD38",
+  "theme_color": "#F5F5F5",
+  "background_color": "#F5F5F5",
   "icons": [
     {
       "src": "/images/manifest/icon-192x192.png",
