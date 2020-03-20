@@ -66,7 +66,7 @@ export class HomePage extends LitElement {
         <loading-display ?hidden=${!this.isLoading}></loading-display>
         <error-display ?hidden=${!this.isError}></error-display>
         <div class="list" ?active=${this.talks.length > 0}>
-          ${this.talks.map(talk => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)} .analytics=${this.analytics}></talk-overview>`)}
+          ${this.talks.map((talk) => html`<talk-overview .talk=${talk} ?isFavourited=${this.isTalkFavourited(talk)} .analytics=${this.analytics}></talk-overview>`)}
         </div>
       </section>
     `;
