@@ -15,12 +15,12 @@ describe('sponsors-page tests', () => {
 
   it('should render the sponsors sections', () => {
     const titles = node.shadowRoot.querySelectorAll('h2');
-    expect(Array.from(titles).map(title => title.textContent.trim())).to.deep.equal(['PREMIER SPONSORS', 'EXECUTIVE SPONSORS', 'ASSOCIATE SPONSORS', 'PARTNER SPONSORS']);
+    expect(Array.from(titles).map((title) => title.textContent.trim())).to.deep.equal(['PREMIER SPONSORS', 'EXECUTIVE SPONSORS', 'ASSOCIATE SPONSORS', 'PARTNER SPONSORS']);
   });
 
   it('should render links to all sponsors', () => {
     const links = node.shadowRoot.querySelectorAll('a');
-    expect(Array.from(links).map(link => link.href)).to.deep.equal(
+    expect(Array.from(links).map((link) => link.href)).to.deep.equal(
       [
         'https://leedsdigitalfestival.org/about/crisp-thinking/',
         'https://leedsdigitalfestival.org/about/university-of-leeds/',

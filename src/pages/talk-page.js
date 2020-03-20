@@ -147,7 +147,7 @@ export class TalkPage extends LitElement {
     const noTalkFound = {
       title: 'No Talk Found',
     };
-    return this.talks.find(talk => talk.id === id) || noTalkFound;
+    return this.talks.find((talk) => talk.id === id) || noTalkFound;
   }
 
   /**

@@ -19,7 +19,7 @@ export const loadFavouriteTalks = async () => {
  * @param {Array} favouriteTalks the list of favourited talks
  * @return {Promise} the pending save
  */
-export const saveFavouriteTalks = async favouriteTalks => Storage.set({ key: 'favourites', value: JSON.stringify(favouriteTalks) });
+export const saveFavouriteTalks = async (favouriteTalks) => Storage.set({ key: 'favourites', value: JSON.stringify(favouriteTalks) });
 
 
 /**

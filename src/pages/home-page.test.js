@@ -17,7 +17,7 @@ describe('home-page tests', () => {
     const title = node.shadowRoot.querySelector('h1');
     expect(title.textContent).to.equal('LEEDS: THE DIGITAL\n        CAPITAL OF THE NORTH');
     const subTitles = node.shadowRoot.querySelectorAll('h2');
-    expect(Array.from(subTitles).map(subTitle => subTitle.textContent.trim())).to.deep.equal(['20th April to 1st May 2020', '#LeedsDigi20']);
+    expect(Array.from(subTitles).map((subTitle) => subTitle.textContent.trim())).to.deep.equal(['20th April to 1st May 2020', '#LeedsDigi20']);
   });
 
   it('should render the list of talks', async () => {

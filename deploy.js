@@ -33,7 +33,7 @@ const contentTypes = {
  * @return {Boolean} is folder
  */
 function isFolder(path) {
-  return Object.keys(contentTypes).filter(type => path.indexOf(type) > -1).length === 0;
+  return Object.keys(contentTypes).filter((type) => path.indexOf(type) > -1).length === 0;
 }
 
 /**
@@ -52,7 +52,7 @@ function readFolder(route) {
 }
 
 readFolder(rootPath + buildPath);
-Promise.all(files.map(file => new Promise((resolve, reject) => {
+Promise.all(files.map((file) => new Promise((resolve, reject) => {
   const contentType = contentTypes[filePath.extname(file)];
   if (contentType) {
     blobService.createBlockBlobFromLocalFile(storageCollection, file.replace(`${buildPath}/`, ''), file, { contentSettings: { contentType } }, (err) => {
