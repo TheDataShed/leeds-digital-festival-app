@@ -3,22 +3,21 @@
 
 ## Overview
 
-Plan to create a website, iOS and Android app for Leeds Digital Festival.
-I'll be doing a talk about its creation at the festival.
-The key points I would like to talk about are:
+We wanted to create a website, iOS and Android app for Leeds Digital Festival.
+This was to support a talk (by https://github.com/jordanfinners) about how it was created and technologies behind its creation at the festival.
+The key points for the talk were about:
  - Building on Azure serverless
- - Pricing benefits of serverless
- - A single code base for two apps and a website
+ - Pricing benefits of serverless technologies
+ - A single code base for two apps and a website and the benefits they bring
  - Performance
 
-We'll be loading the talks from the Wordpress database that backs the Leeds Digital Festival website.
+We'll be loading the talks from the Leeds Digital Festival website.
 It'll be built on Azure, using Blob Storage and Azure Functions.
-Looking at either Azure App Center or Github actions for the build process, potentially manual releases depending on time constrains.
+Github Actions for the build process, with manual releases due to time constrains (Ideally we would automate this in future).
 
+## UI
 
-We want to keep the app really simple, no frills around the edges.
-
-## Tools
+### Tools
 
 We'll be using [LitElement](https://lit-element.polymer-project.org/) for the UI alongside existing [Material components](https://github.com/material-components/material-components-web-components).
 
@@ -34,6 +33,24 @@ Useful commands to know:
 * Run linting `npm run lint`
 * Run linting with autofix on `npm run lint:fix`
 * Run the build `npm run build`
+
+## Apps
+
+### Android
+
+Android is a [Trusted Web Activity](https://developers.google.com/web/android/trusted-web-activity), which acts as a wrapper this is based off https://github.com/GoogleChromeLabs/svgomg-twa/
+This will wrap the website into an application which can be downloaded off Google Play Store.
+As it just loads the website it does not need to be updated when the website is updated.
+
+### iOS
+
+iOS is a [Capacitor Wrapper](https://capacitor.ionicframework.com/docs/getting-started/) of the website. This displays the website in a WKWebView but with access to native API's.
+When you change the UI and want to update the iOS app you'll need to do the following:
+```bash
+npm run build
+npx cap sync ios
+```
+This will build the updated UI and sync these files to the iOS project. You will then need to open xCode and update the version and release a new version of the app.
 
 ## Project Board
 
